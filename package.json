@@ -2,16 +2,17 @@
   "name": "single",
   "version": "0.1.0",
   "private": true,
-	"scripts": {
-		"launch": "npm-run-all --parallel server-serve vue-serve",
-		"lint": "vue-cli-service lint",
-		"build": "vue-cli-service build",
-		"server-serve": "nodemon web-server.js",
-		"vue-serve": "vue-cli-service serve",
-		"postinstall": "npm run build"
-	},
+  "scripts": {
+    "launch": "npm-run-all --parallel server-serve vue-serve",
+    "lint": "vue-cli-service lint",
+    "build": "vue-cli-service build",
+    "server-serve": "nodemon web-server.js",
+    "vue-serve": "vue-cli-service serve",
+    "postinstall": "npm run build"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.5",
     "core-js": "^3.6.4",
     "express": "^4.17.1",
