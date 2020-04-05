@@ -1,35 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <the-drawer v-if="$vuetify.breakpoint.smAndDown" v-model="drawer"></the-drawer>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn to="/" text>
-        <span class="mr-2">Home</span>
-      </v-btn>
-      <v-btn to="/about" text>
-        <span class="mr-2">About</span>
-      </v-btn>
-    </v-app-bar>
+    <the-menu v-model="drawer"></the-menu>
 
     <v-content>
       <transition name="fade" mode="out-in">
@@ -40,10 +13,18 @@
 </template>
 
 <script>
+import TheMenu from "@/components/Interface/TheMenu";
+import TheDrawer from "@/components/Interface/TheDrawer";
+
 export default {
   name: "App",
-  components: {},
-  data: () => ({})
+  components: {
+    TheMenu,
+    TheDrawer
+  },
+  data: () => ({
+    drawer: false
+  })
 };
 </script>
 
