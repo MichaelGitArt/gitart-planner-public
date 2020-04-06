@@ -1,0 +1,16 @@
+@import "~vuetify/src/styles/styles.sass";
+
+@media #{map-get($display-breakpoints, 'xl-only')} {
+}
+
+@media #{map-get($display-breakpoints, 'lg-and-down')} {
+}
+
+@media #{map-get($display-breakpoints, 'md-and-down')} {
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-down')} {
+}
+
+@media #{map-get($display-breakpoints, 'xs-only')} {
+}
