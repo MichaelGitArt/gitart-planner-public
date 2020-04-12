@@ -24,7 +24,16 @@ export default {
   },
   data: () => ({
     drawer: false
-  })
+  }),
+  beforeCreate() {
+    fetch(`${process.env.VUE_APP_URL}/api/auth/check`, {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .then(resData => {
+        console.log(`beforeCreate -> resData`, resData);
+      });
+  }
 };
 </script>
 

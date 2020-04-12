@@ -1,7 +1,7 @@
 	<template>
   <div class="auth-google">
     <h2 class="mb-3 auth-google-title">Вхід через Google</h2>
-    <div @click="oAuth" class="auth-google-action group">
+    <div @click="oAuthRedirect" class="auth-google-action group">
       <v-btn :disabled="disabled" class="elevation-0" color="white">
         <svg
           version="1.1"
@@ -34,15 +34,32 @@
       </v-btn>
       <v-btn :disabled="disabled" class="elevation-0" color="primary">Google</v-btn>
     </div>
+    <content-alert :message="errorMessage"></content-alert>
   </div>
 </template>
 	
 <script>
+import ContentAlert from "@/components/General/ContentAlert.vue";
 export default {
   props: ["disabled"],
+  components: {
+    ContentAlert
+  },
+  data: () => ({
+    errorMessage: null
+  }),
+  mounted() {
+    console.log(process.env.VUE_APP_URL2);
+    console.log(`mounted -> process.env`, process.env);
+    console.log();
+    this.errorMessage = this.$route.query.error || null;
+  },
   methods: {
-    oAuth() {
+    oAuthRedirect() {
+      this.errorMessage = null;
+
       if (this.disabled) return;
+      location.href = process.env.VUE_APP_URL2 + "/api/auth/oauth";
     }
   }
 };

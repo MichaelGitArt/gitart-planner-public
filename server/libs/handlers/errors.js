@@ -10,3 +10,15 @@ module.exports.catchErrors = (fn) => {
 			})
 	}
 }
+
+/**
+ * Centrall error handling
+ */
+module.exports.handleErrors = (err, res) => {
+	const { statusCode, message } = err;
+	res.status(statusCode || 500).json({
+		status: "error",
+		statusCode: statusCode || 500,
+		message
+	});
+}

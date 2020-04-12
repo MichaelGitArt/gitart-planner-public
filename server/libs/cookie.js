@@ -1,7 +1,14 @@
 const TWO_DAYS_IN_MILLISECONDS = 172800000 // 1000 * 60 * 60 * 24 * 2
 
-module.exports.cookieUpdate = (res, cookieName, value) => {
-	res.cookie(cookieName, value, { maxAge: TWO_DAYS_IN_MILLISECONDS * 24 * 7, httpOnly: true, secure: process.env.NODE_ENV === "production" })
+module.exports.cookieUpdate = (res, cookieName, value, customParams) => {
+	let params = {
+		maxAge: TWO_DAYS_IN_MILLISECONDS,
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		...customParams
+	};
+
+	res.cookie(cookieName, value, params)
 };
 
 module.exports.cookieExtract = (req) => {

@@ -9,8 +9,8 @@ import '@/scss/main.scss';
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
+	router,
+	store,
+	vuetify,
+	render: h => h(App)
 }).$mount('#app')

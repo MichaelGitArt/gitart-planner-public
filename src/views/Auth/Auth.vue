@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="pt-4" justify="center">
-      <v-col cols="auto">
+      <v-col lg="4" sm="6" cols ="10">
         <google-auth></google-auth>
       </v-col>
     </v-row>
