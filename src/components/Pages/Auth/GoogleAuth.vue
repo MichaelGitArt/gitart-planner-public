@@ -49,9 +49,6 @@ export default {
     errorMessage: null
   }),
   mounted() {
-    console.log(process.env.VUE_APP_URL2);
-    console.log(`mounted -> process.env`, process.env);
-    console.log();
     this.errorMessage = this.$route.query.error || null;
   },
   methods: {

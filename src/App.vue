@@ -31,7 +31,10 @@ export default {
     })
       .then(res => res.json())
       .then(resData => {
-        console.log(`beforeCreate -> resData`, resData);
+        if (resData.auth) {
+          return this.$store.commit("setUser", resData.user);
+        }
+        this.$store.commit("setUser", null);
       });
   }
 };

@@ -6,6 +6,8 @@ const auth = require('../middleware/authentication')
 
 router.post('/check', auth({ required: false }), catchErrors(authController.checkUser));
 
+router.post('/logout', auth({ required: false }), catchErrors(authController.logout));
+
 router.get('/oauth', catchErrors(authController.oAuth));
 router.get('/oauth-callback', catchErrors(authController.oAuthCallback));
 

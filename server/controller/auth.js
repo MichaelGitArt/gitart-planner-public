@@ -29,6 +29,12 @@ module.exports.checkUser = async (req, res) => {
 	})
 };
 
+module.exports.logout = async (req, res) => {
+	cookieUpdate(res, 'jwt', '', { maxAge: 0 });
+	res.json({
+		success: true
+	});
+}
 
 /**
  * OAuth section
