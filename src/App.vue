@@ -16,6 +16,8 @@
 import TheMenu from "@/components/Interface/TheMenu";
 import TheDrawer from "@/components/Interface/TheDrawer";
 
+import authService from "@/services/authService";
+
 export default {
   name: "App",
   components: {
@@ -26,16 +28,12 @@ export default {
     drawer: false
   }),
   beforeCreate() {
-    fetch(`${process.env.VUE_APP_URL}/api/auth/check`, {
-      method: "POST"
-    })
-      .then(res => res.json())
-      .then(resData => {
-        if (resData.auth) {
-          return this.$store.commit("setUser", resData.user);
-        }
-        this.$store.commit("setUser", null);
-      });
+    authService.check().then(({ data }) => {
+      if (data.auth) {
+        return this.$store.commit("setUser", data.user);
+      }
+      this.$store.commit("setUser", null);
+    });
   }
 };
 </script>

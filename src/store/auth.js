@@ -1,4 +1,5 @@
 import router from '../router';
+import authService from '@/services/authService';
 
 export default {
 	state: {
@@ -17,12 +18,9 @@ export default {
 	},
 	actions: {
 		logout({ commit }) {
-			fetch(`${process.env.VUE_APP_URL}/api/auth/logout`, {
-				method: "POST"
-			})
-				.then(res => res.json())
-				.then(resData => {
-					if (resData.success) {
+			authService.logout()
+				.then(({ data }) => {
+					if (data.success) {
 						commit('setUser', null);
 						router.go('/')
 					}
