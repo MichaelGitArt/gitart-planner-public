@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '@/views/Home.vue'
 
-import store from '../store'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -16,7 +16,7 @@ const routes = [
 		path: '/auth',
 		name: 'Auth',
 		beforeEnter: authStatus(false),
-		component: () => import('../views/Auth/Auth.vue')
+		component: () => import('@/views/Auth/Auth.vue')
 	}
 ]
 

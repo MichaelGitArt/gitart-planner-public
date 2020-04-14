@@ -5,6 +5,6 @@ export default {
 		return apiClient.post('auth/check');
 	},
 	logout() {
-		return apiClient.get('auth/logout');
+		return apiClient.post('auth/logout');
 	}
 }

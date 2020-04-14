@@ -13,8 +13,7 @@
       </router-link>
       <v-spacer></v-spacer>
       <v-btn v-if="userChecked && !user" color="warning" tag="button" to="/auth">Увійти</v-btn>
-      <v-btn v-else color="warning" tag="button" @click="logout">Вийти</v-btn>
-      <v-progress-linear v-if="!userChecked" class="loader" indeterminate height="5" color="white"></v-progress-linear>
+      <v-btn v-if="userChecked && user" color="warning" tag="button" @click="logout">Вийти</v-btn>
     </v-container>
   </v-app-bar>
 </template>
@@ -25,7 +24,8 @@ export default {
   props: ["value"],
   methods: {
     ...mapActions(["logout"])
-  }
+  },
+  computed: {}
 };
 </script>
 
