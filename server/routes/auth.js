@@ -11,4 +11,6 @@ router.post('/logout', auth({ required: false }), catchErrors(authController.log
 router.get('/oauth', catchErrors(authController.oAuth));
 router.get('/oauth-callback', catchErrors(authController.oAuthCallback));
 
+router.post('/profile/:slug', auth({ required: false }), catchErrors(authController.getProfile));
+
 module.exports = router;

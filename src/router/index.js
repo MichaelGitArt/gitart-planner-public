@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 import Home from '@/views/Home.vue'
+import ProfileGeneral from '@/views/Profile/General.vue';
+import ProfilePersonal from '@/views/Profile/Personal.vue';
 
 import store from '@/store'
 
@@ -17,7 +20,20 @@ const routes = [
 		name: 'Auth',
 		beforeEnter: authStatus(false),
 		component: () => import('@/views/Auth/Auth.vue')
-	}
+	},
+	{
+		path: '/myprofile',
+		name: 'MyProfile',
+		beforeEnter: authStatus(true),
+		component: ProfilePersonal
+	},
+	{
+		path: '/profile/:slug',
+		name: 'Profile',
+		props: true,
+		beforeEnter: authStatus(true),
+		component: ProfileGeneral
+	},
 ]
 
 const router = new VueRouter({

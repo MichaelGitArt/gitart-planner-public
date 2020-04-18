@@ -6,5 +6,8 @@ export default {
 	},
 	logout() {
 		return apiClient.post('auth/logout');
+	},
+	getProfile(slug) {
+		return apiClient.post('auth/profile/' + slug)
 	}
 }

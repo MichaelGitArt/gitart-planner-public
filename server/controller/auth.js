@@ -19,9 +19,7 @@ module.exports.checkUser = async (req, res) => {
 	if (user) {
 		return res.json({
 			auth: true,
-			user: {
-				name: user.name
-			}
+			user: user.getProfileInfo()
 		})
 	}
 	return res.json({
@@ -86,6 +84,25 @@ module.exports.oAuthCallback = async (req, res) => {
 		})
 }
 
+module.exports.getProfile = async (req, res) => {
+	let slug = req.params.slug;
+
+	if (req.user.slug === slug) {
+		return res.json({
+			user: {
+				...req.user.getProfileInfo(),
+				me: true
+			}
+		})
+	}
+
+	User.findOne({ slug: slug })
+		.then(user => {
+			res.json({
+				user: user.getProfileInfo()
+			});
+		})
+};
 
 function storeUserJWT(res, user) {
 	const token = jwt.sign({

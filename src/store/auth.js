@@ -22,9 +22,15 @@ export default {
 				.then(({ data }) => {
 					if (data.success) {
 						commit('setUser', null);
-						router.go('/')
+						router.push("/");
 					}
 				});
+		},
+		getProfile(ctx, slug) {
+			return authService.getProfile(slug)
+				.then(({ data }) => {
+					return data.user;
+				})
 		}
 	},
 	getters: {
