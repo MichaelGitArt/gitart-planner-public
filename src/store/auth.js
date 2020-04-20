@@ -22,7 +22,9 @@ export default {
 				.then(({ data }) => {
 					if (data.success) {
 						commit('setUser', null);
-						router.push("/");
+						if (router.currentRoute.path !== '/') {
+							router.push("/");
+						}
 					}
 				});
 		},
