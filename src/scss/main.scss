@@ -1,28 +1,4 @@
-@import "~nprogress/nprogress.css";
-
-#nprogress .bar {
-	background: #fff;
-	height: 3px;
-	box-shadow: 0 0 7px #fff, 0 0 16px #fff;
-}
-#nprogress .peg {
-	display: block;
-	position: absolute;
-	right: 0px;
-	width: 100px;
-	height: 100%;
-	box-shadow: 0 0 10px #fff, 0 0 5px #fff;
-}
-#nprogress .spinner-icon {
-	width: 18px;
-	height: 18px;
-	box-sizing: border-box;
-
-	border: solid 2px transparent;
-	border-top-color: #fff;
-	border-left-color: #fff;
-}
-
+@import "./utils/nprogress";
 @import "./utils/animation";
 
 @import "media";
