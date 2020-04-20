@@ -1,0 +1,26 @@
+// Fade
+.fade-enter-active,
+.fade-leave-active {
+	transition: all 0.2s ease;
+	overflow: hidden;
+}
+.fade-enter,
+.fade-leave-active {
+	opacity: 0;
+}
+
+// Fade slide
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+	transition: all 0.2s ease;
+	transform: translate(0, 0);
+}
+
+.fade-slide-enter {
+	transform: translate(0, 6px);
+	opacity: 0;
+}
+.fade-slide-leave-active {
+	transform: translate(0, -6px);
+	opacity: 0;
+}

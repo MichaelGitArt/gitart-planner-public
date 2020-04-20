@@ -5,7 +5,7 @@
     <the-menu v-model="drawer"></the-menu>
 
     <v-content>
-      <transition name="fade" mode="out-in">
+      <transition name="fade-slide" mode="out-in" appear>
         <router-view></router-view>
       </transition>
     </v-content>
@@ -37,18 +37,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition-duration: 0.2s;
-  transition-property: height, opacity;
-  transition-timing-function: ease;
-  overflow: hidden;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-</style>
