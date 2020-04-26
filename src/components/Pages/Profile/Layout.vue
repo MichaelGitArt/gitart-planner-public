@@ -5,6 +5,7 @@
         <slot name="header"></slot>
       </profile-header>
       <div class="px-4" v-if="$slots.default">
+        <v-divider class="mb-3"></v-divider>
         <slot></slot>
       </div>
     </v-card>
