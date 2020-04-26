@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import userExpration from './plugins/user-expantion';
+import '@/utils/VeeValidate.js';
 
 import '@/scss/main.scss';
 

@@ -8,13 +8,19 @@ const apiClient = axios.create({
 	}
 })
 
-apiClient.interceptors.request.use(config => { // Called on request
+apiClient.interceptors.request.use(config => {
 	loadingStore.dispatch('startLoading');
 	return config
 })
-apiClient.interceptors.response.use(response => { // Called on response
-	loadingStore.dispatch('endLoading');
-	return response
-})
+
+apiClient.interceptors.response.use(
+	response => {
+		loadingStore.dispatch('endLoading');
+		return response
+	},
+	err => {
+		loadingStore.dispatch('endLoading');
+		return Promise.reject(err);
+	})
 
 export default apiClient

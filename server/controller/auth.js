@@ -1,5 +1,6 @@
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator')
 
 const errorMessages = require('../libs/response-messages');
 const { cookieUpdate } = require('../libs/cookie');
@@ -102,6 +103,41 @@ module.exports.getProfile = async (req, res) => {
 				user: user.getProfileInfo()
 			});
 		})
+};
+
+module.exports.updateProfile = async (req, res) => {
+	const errors = validationResult(req);
+	console.log(`module.exports.updateProfile -> errors`, errors);
+	if (!errors.isEmpty() || !req.slugValidation.status) {
+		return res.status(422).json({
+			success: false,
+			errors: errors.array(),
+			slugValidation: req.slugValidation
+		})
+	}
+	const slug = req.body.slug;
+	const name = req.body.name;
+
+	req.user.slug = slug;
+	req.user.name = name;
+
+	req.user.save()
+		.then(savedUser => {
+			const profile = savedUser.getProfileInfo();
+			res.json({
+				success: true,
+				user: profile
+			});
+
+		})
+
+};
+
+module.exports.checkFreeSlug = async (req, res) => {
+	res.json({
+		status: req.slugValidation.status,
+		message: req.slugValidation.message
+	});
 };
 
 function storeUserJWT(res, user) {

@@ -2,6 +2,8 @@ const shortid = require('shortid');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+shortid.characters(process.env.SHORTID_CHARS);
+
 const userSchema = new Schema({
 	name: String,
 	lastName: String,

@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import ProfileGeneral from '@/views/Profile/General.vue';
 import ProfilePersonal from '@/views/Profile/Personal.vue';
+import ProfileEdit from '@/views/Profile/Edit.vue';
 
 import store from '@/store'
 
@@ -25,7 +26,15 @@ const routes = [
 		path: '/myprofile',
 		name: 'MyProfile',
 		beforeEnter: authStatus(true),
-		component: ProfilePersonal
+		component: ProfilePersonal,
+		children: [
+			{
+				path: 'edit',
+				name: 'MyProfileEdit',
+				component: ProfileEdit,
+				beforeEnter: authStatus(true),
+			}
+		]
 	},
 	{
 		path: '/profile/:slug',
