@@ -15,7 +15,7 @@ module.exports = (customOptions = {}) => {
 		let jwtToken = cookieExtract(req).jwt;
 		jwt.verify(jwtToken, process.env.JWT_SECRET, (err, decoded) => {
 			if (err && options.required) {
-				throw new AuthenticationError();
+				throw AuthenticationError();
 			} else if (err) {
 				req.user = null;
 				next();
