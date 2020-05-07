@@ -25,7 +25,8 @@ export default {
     TheDrawer
   },
   data: () => ({
-    drawer: false
+    drawer: false,
+    navLinks: [{ to: { name: "GroupMain" }, text: "Групи" }]
   }),
   beforeCreate() {
     authService.check().then(({ data }) => {

@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import multiguard from 'vue-router-multiguard';
 
 import Home from '@/views/Home.vue'
 import ProfileGeneral from '@/views/Profile/General.vue';
 import ProfilePersonal from '@/views/Profile/Personal.vue';
 import ProfileEdit from '@/views/Profile/Edit.vue';
+
+import GroupMain from '@/views/Group/Main'
+import GroupAdd from '@/views/Group/Add/Main'
+import GroupJoin from '@/views/Group/Add/Join'
+import GroupCreate from '@/views/Group/Add/Create'
 
 import store from '@/store'
 
@@ -31,8 +37,7 @@ const routes = [
 			{
 				path: 'edit',
 				name: 'MyProfileEdit',
-				component: ProfileEdit,
-				beforeEnter: authStatus(true),
+				component: ProfileEdit
 			}
 		]
 	},
@@ -43,6 +48,39 @@ const routes = [
 		beforeEnter: authStatus(true),
 		component: ProfileGeneral
 	},
+
+	{
+		path: '/group',
+		name: 'GroupMain',
+		beforeEnter: authStatus(true),
+		component: GroupMain,
+	},
+	{
+		path: '/group/add',
+		name: 'GroupAdd',
+		beforeEnter: multiguard([
+			authStatus(true),
+			(to, from, next) => {
+				if (to.name === "GroupAdd") {
+					next({ name: "GroupCreate" });
+				}
+				next();
+			}
+		]),
+		component: GroupAdd,
+		children: [
+			{
+				path: 'join',
+				name: 'GroupJoin',
+				component: GroupJoin
+			},
+			{
+				path: 'create',
+				name: 'GroupCreate',
+				component: GroupCreate
+			},
+		]
+	}
 ]
 
 const router = new VueRouter({

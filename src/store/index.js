@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import authStore from './auth'
+import groupStore from './group'
 import loadingStore from './loading'
 
 Vue.use(Vuex)
@@ -15,6 +16,7 @@ export default new Vuex.Store({
 	},
 	modules: {
 		auth: authStore,
-		loading: loadingStore
+		loading: loadingStore,
+		group: groupStore
 	}
 })
