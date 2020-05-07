@@ -1,12 +1,8 @@
 <template>
   <div>
-    <div class="d-flex flex-wrap">
-      <v-btn icon class="mb-5 mr-3" color="warning" to="/myprofile">
-        <v-icon dark>mdi-arrow-left</v-icon>
-      </v-btn>
-
-      <h2 class="mb-5">Редагування</h2>
-    </div>
+    <base-page-back route="/myprofile" class="mb-5">
+      <h2>Редагування</h2>
+    </base-page-back>
 
     <validation-observer ref="observer" v-slot="{ touched }">
       <v-form @submit.prevent="submit">
