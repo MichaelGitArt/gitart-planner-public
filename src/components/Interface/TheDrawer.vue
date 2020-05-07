@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer :value="value" @input="$emit('input', $event)" absolute temporary app></v-navigation-drawer>
+  <v-navigation-drawer :value="value" @input="$emit('input', $event)" absolute clipped app></v-navigation-drawer>
 </template>
 
 <script>
