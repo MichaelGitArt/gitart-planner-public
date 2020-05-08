@@ -25,6 +25,11 @@ const userSchema = new Schema({
 		unique: true,
 		index: true
 	},
+	groups: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Group',
+		required: true
+	}]
 }, { timestamp: true })
 
 userSchema.methods.getProfileInfo = function () {
@@ -33,5 +38,10 @@ userSchema.methods.getProfileInfo = function () {
 		slug: this.slug
 	};
 };
+
+userSchema.methods.addGroup = function (group) {
+	this.groups.push(group._id.toString());
+	return this.save();
+}
 
 module.exports = mongoose.model('User', userSchema);
