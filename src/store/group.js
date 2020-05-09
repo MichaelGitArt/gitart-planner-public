@@ -6,6 +6,9 @@ export default {
 		roleTypes: ['admin', 'member']
 	},
 	getters: {
+		getGroups(state) {
+			return state.groups
+		}
 	},
 	mutations: {
 		addGroup(state, group) {
@@ -15,6 +18,12 @@ export default {
 		}
 	},
 	actions: {
+		fetchGroups() {
+			groupService.getGroups()
+				.then(({ data }) => {
+					console.log(`fetchGroups -> data`, data);
+				})
+		},
 		createGroup({ commit }, name) {
 			return groupService.create(name)
 				.then(({ data }) => {
@@ -24,5 +33,6 @@ export default {
 					return data;
 				})
 		}
-	}
+	},
+
 };

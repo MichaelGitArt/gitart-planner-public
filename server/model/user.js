@@ -25,9 +25,9 @@ const userSchema = new Schema({
 		unique: true,
 		index: true
 	},
-	groups: [{
+	membership: [{
 		type: Schema.Types.ObjectId,
-		ref: 'Group',
+		ref: 'Member',
 		required: true
 	}]
 }, { timestamp: true })
@@ -39,8 +39,8 @@ userSchema.methods.getProfileInfo = function () {
 	};
 };
 
-userSchema.methods.addGroup = function (group) {
-	this.groups.push(group._id.toString());
+userSchema.methods.addMembership = function (member) {
+	this.membership.push(member._id.toString());
 	return this.save();
 }
 

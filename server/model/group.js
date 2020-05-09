@@ -16,16 +16,9 @@ const groupSchema = new Schema({
 		index: true
 	},
 	members: [{
-		user: {
-			type: Schema.Types.ObjectId,
-			ref: 'User',
-			required: true
-		},
-		role: {
-			type: String,
-			required: true,
-			enum: ['admin', 'member']
-		}
+		type: Schema.Types.ObjectId,
+		ref: 'Member',
+		required: true
 	}]
 }, { timestamp: true })
 
