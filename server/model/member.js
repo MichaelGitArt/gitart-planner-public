@@ -6,7 +6,6 @@ const memberSchema = new Schema(
 		user: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
-			required: true,
 		},
 		role: {
 			type: String,
@@ -16,7 +15,6 @@ const memberSchema = new Schema(
 		group: {
 			type: Schema.Types.ObjectId,
 			ref: 'Group',
-			required: true,
 		},
 	},
 	{ timestamp: true },

@@ -26,11 +26,10 @@ const userSchema = new Schema(
 			unique: true,
 			index: true,
 		},
-		groups: [
+		membership: [
 			{
 				type: Schema.Types.ObjectId,
-				ref: 'Group',
-				required: true,
+				ref: 'Member',
 			},
 		],
 	},
@@ -42,11 +41,6 @@ userSchema.methods.getProfileInfo = function() {
 		name: this.name,
 		slug: this.slug,
 	};
-};
-
-userSchema.methods.addGroup = function(group) {
-	this.groups.push(group._id.toString());
-	return this.save();
 };
 
 module.exports = mongoose.model('User', userSchema);

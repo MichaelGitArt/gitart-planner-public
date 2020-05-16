@@ -3,36 +3,44 @@ import groupService from '@/services/groupService';
 export default {
 	state: {
 		groups: [],
-		roleTypes: ['admin', 'member']
 	},
 	getters: {
 		getGroups(state) {
-			return state.groups
-		}
+			return state.groups;
+		},
 	},
 	mutations: {
 		addGroup(state, group) {
-			if (state.roleTypes.includes(group.role)) {
+			if (Array.isArray(group)) {
+				state.groups.push(...group);
+			} else {
 				state.groups.push(group);
 			}
-		}
+		},
+		setGroups(state, groups) {
+			state.groups.push(...groups);
+			console.log(state.groups);
+		},
 	},
 	actions: {
-		fetchGroups() {
-			groupService.getGroups()
-				.then(({ data }) => {
-					console.log(`fetchGroups -> data`, data);
-				})
+		fetchGroups({ commit }) {
+			groupService.getGroups().then(({ data }) => {
+				if (data.success) {
+					commit('setGroups', data.groups);
+				}
+			});
 		},
 		createGroup({ commit }, name) {
-			return groupService.create(name)
-				.then(({ data }) => {
-					if (data.success) {
-						commit('addGroup', data.group);
-					}
-					return data;
-				})
-		}
+			return groupService.create(name).then(({ data }) => {
+				if (data.success) {
+					commit('addGroup', {
+						isAdmin: true,
+						name: data.group.name,
+						code: data.group.code,
+					});
+				}
+				return data;
+			});
+		},
 	},
-
 };
