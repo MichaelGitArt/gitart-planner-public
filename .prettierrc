@@ -2,5 +2,6 @@
   "singleQuote": true,
   "useTabs": true,
   "endOfLine": "crlf",
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "arrowParens": "always"
 }
