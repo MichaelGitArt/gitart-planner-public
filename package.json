@@ -64,6 +64,10 @@
     },
     "rules": {}
   },
+  "engines": {
+    "node": "12.16.x",
+    "npm": "6.x"
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions"
