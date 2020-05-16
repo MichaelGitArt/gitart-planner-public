@@ -56,6 +56,7 @@ module.exports.getGroups = (req, res) => {
 				isAdmin: { $eq: ['admin', '$role'] },
 				name: '$group.name',
 				code: '$group.code',
+				countMembers: { $size: '$group.members' },
 			},
 		},
 	]).exec((err, groups) => {

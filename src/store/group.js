@@ -19,7 +19,6 @@ export default {
 		},
 		setGroups(state, groups) {
 			state.groups.push(...groups);
-			console.log(state.groups);
 		},
 	},
 	actions: {
@@ -37,6 +36,7 @@ export default {
 						isAdmin: true,
 						name: data.group.name,
 						code: data.group.code,
+						countMembers: 1,
 					});
 				}
 				return data;
