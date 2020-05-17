@@ -1,4 +1,9 @@
 module.exports = {
+	resolve: {
+		alias: {
+			'@': require('path').resolve(__dirname, 'src'),
+		},
+	},
 	module: {
 		rules: [
 			{
@@ -9,11 +14,11 @@ module.exports = {
 					{
 						loader: 'sass-loader',
 						options: {
-							prependData: "@import '@/scss/variables.scss';"
+							prependData: '@import "@/scss/variables.scss";',
 						},
 					},
 				],
 			},
 		],
 	},
-}
+};

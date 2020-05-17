@@ -1,32 +1,33 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 import multiguard from 'vue-router-multiguard';
 
-import Home from '@/views/Home.vue'
+import Home from '@/views/Home.vue';
 import ProfileGeneral from '@/views/Profile/General.vue';
 import ProfilePersonal from '@/views/Profile/Personal.vue';
 import ProfileEdit from '@/views/Profile/Edit.vue';
 
-import GroupMain from '@/views/Group/Main'
-import GroupAdd from '@/views/Group/Add/Main'
-import GroupJoin from '@/views/Group/Add/Join'
-import GroupCreate from '@/views/Group/Add/Create'
+import GroupMain from '@/views/Group/Main';
+import GroupAdd from '@/views/Group/Add/Main';
+import GroupJoin from '@/views/Group/Add/Join';
+import GroupCreate from '@/views/Group/Add/Create';
+import GroupSingle from '@/views/Group/Single/Main';
 
-import store from '@/store'
+import store from '@/store';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
 	{
 		path: '/',
 		name: 'Home',
-		component: Home
+		component: Home,
 	},
 	{
 		path: '/auth',
 		name: 'Auth',
 		beforeEnter: authStatus(false),
-		component: () => import('@/views/Auth/Auth.vue')
+		component: () => import('@/views/Auth/Auth.vue'),
 	},
 	{
 		path: '/myprofile',
@@ -37,16 +38,16 @@ const routes = [
 			{
 				path: 'edit',
 				name: 'MyProfileEdit',
-				component: ProfileEdit
-			}
-		]
+				component: ProfileEdit,
+			},
+		],
 	},
 	{
 		path: '/profile/:slug',
 		name: 'Profile',
 		props: true,
 		beforeEnter: authStatus(true),
-		component: ProfileGeneral
+		component: ProfileGeneral,
 	},
 
 	{
@@ -56,39 +57,44 @@ const routes = [
 		component: GroupMain,
 	},
 	{
-		path: '/group/add',
+		path: '/group/:code',
+		name: 'GroupSingle',
+		component: GroupSingle,
+	},
+	{
+		path: '/group-add',
 		name: 'GroupAdd',
 		beforeEnter: multiguard([
 			authStatus(true),
 			(to, from, next) => {
-				if (to.name === "GroupAdd") {
-					next({ name: "GroupCreate" });
+				if (to.name === 'GroupAdd') {
+					next({ name: 'GroupCreate' });
 				}
 				next();
-			}
+			},
 		]),
 		component: GroupAdd,
 		children: [
 			{
 				path: 'join',
 				name: 'GroupJoin',
-				component: GroupJoin
+				component: GroupJoin,
 			},
 			{
 				path: 'create',
 				name: 'GroupCreate',
-				component: GroupCreate
+				component: GroupCreate,
 			},
-		]
-	}
-]
+		],
+	},
+];
 
 const router = new VueRouter({
 	mode: 'history',
-	routes
-})
+	routes,
+});
 
-export default router
+export default router;
 
 // Check authentication status
 function authStatus(status = false) {
@@ -96,9 +102,12 @@ function authStatus(status = false) {
 		if (store.getters.userChecked) {
 			authStatusSwitch(status, store.getters.user, next, from);
 		} else {
-			store.watch(state => state.auth.checked, () => {
-				authStatusSwitch(status, store.getters.user, next, from);
-			})
+			store.watch(
+				(state) => state.auth.checked,
+				() => {
+					authStatusSwitch(status, store.getters.user, next, from);
+				},
+			);
 		}
 	};
 }
