@@ -105,7 +105,6 @@ module.exports.getProfile = async (req, res) => {
 
 module.exports.updateProfile = async (req, res) => {
 	const errors = validationResult(req);
-	console.log(`module.exports.updateProfile -> errors`, errors);
 	if (!errors.isEmpty() || !req.slugValidation.status) {
 		return res.status(422).json({
 			success: false,

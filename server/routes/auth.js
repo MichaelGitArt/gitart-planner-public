@@ -31,6 +31,9 @@ router.post(
 	auth({ required: true }),
 	checkSlug,
 	[
+		check('slug')
+			.isString()
+			.trim(),
 		check('name')
 			.isLength({ min: 3, max: 30 })
 			.withMessage('Від 3 до 30 символів')
