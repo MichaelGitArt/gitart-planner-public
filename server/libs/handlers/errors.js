@@ -1,24 +1,23 @@
 /**
  * Instead of using try{} catch(e){} in each controller, we wrap functions in
- * catchErrors(), catch any errors ther throw? and pass it along with next
+ * catchErrors(), catch any errors throw and pass it along with next
  */
 module.exports.catchErrors = (fn) => {
-	return function (req, res, next) {
-		return fn(req, res, next)
-			.catch(err => {
-				next(err);
-			})
-	}
-}
+	return function(req, res, next) {
+		return fn(req, res, next).catch((err) => {
+			next(err);
+		});
+	};
+};
 
 /**
- * Centrall error handling
+ * Central error handling
  */
 module.exports.handleErrors = (err, res) => {
 	const { statusCode, message } = err;
 	res.status(statusCode || 500).json({
-		status: "error",
+		status: 'error',
 		statusCode: statusCode || 500,
-		message
+		message,
 	});
-}
+};

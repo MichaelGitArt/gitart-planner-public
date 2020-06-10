@@ -1,6 +1,6 @@
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator')
+const { validationResult } = require('express-validator');
 
 const errorMessages = require('../libs/response-messages');
 const { cookieUpdate } = require('../libs/cookie');
@@ -9,7 +9,7 @@ const User = require('../model/user');
 const client = new OAuth2Client(
 	process.env.GOOGLE_CLIENT_ID,
 	process.env.GOOGLE_CLIENT_SECRET,
-	`${process.env.URL2}/api/auth/oauth-callback`
+	`${process.env.URL2}/api/auth/oauth-callback`,
 );
 
 /**
@@ -20,20 +20,20 @@ module.exports.checkUser = async (req, res) => {
 	if (user) {
 		return res.json({
 			auth: true,
-			user: user.getProfileInfo()
-		})
+			user: user.getProfileInfo(),
+		});
 	}
 	return res.json({
-		auth: false
-	})
+		auth: false,
+	});
 };
 
 module.exports.logout = async (req, res) => {
 	cookieUpdate(res, 'jwt', '', { maxAge: 0 });
 	res.json({
-		success: true
+		success: true,
 	});
-}
+};
 
 /**
  * OAuth section
@@ -45,11 +45,11 @@ module.exports.oAuth = async (req, res) => {
 			'https://www.googleapis.com/auth/userinfo.profile',
 			'https://www.googleapis.com/auth/userinfo.email',
 		],
-		prompt: 'consent'
-	})
+		prompt: 'consent',
+	});
 
 	res.redirect(authorizeUrl);
-}
+};
 
 module.exports.oAuthCallback = async (req, res) => {
 	const { code } = req.query;
@@ -76,14 +76,13 @@ module.exports.oAuthCallback = async (req, res) => {
 		name: profile.data.name,
 		email: profile.data.email,
 		emailConfirmed: profile.data.verified_email,
-	})
+	});
 
-	user.save()
-		.then(savedUser => {
-			storeUserJWT(res, savedUser);
-			return res.redirect(process.env.URL);
-		})
-}
+	user.save().then((savedUser) => {
+		storeUserJWT(res, savedUser);
+		return res.redirect(process.env.URL);
+	});
+};
 
 module.exports.getProfile = async (req, res) => {
 	let slug = req.params.slug;
@@ -92,17 +91,16 @@ module.exports.getProfile = async (req, res) => {
 		return res.json({
 			user: {
 				...req.user.getProfileInfo(),
-				me: true
-			}
-		})
+				me: true,
+			},
+		});
 	}
 
-	User.findOne({ slug: slug })
-		.then(user => {
-			res.json({
-				user: user.getProfileInfo()
-			});
-		})
+	User.findOne({ slug: slug }).then((user) => {
+		res.json({
+			user: user.getProfileInfo(),
+		});
+	});
 };
 
 module.exports.updateProfile = async (req, res) => {
@@ -112,8 +110,8 @@ module.exports.updateProfile = async (req, res) => {
 		return res.status(422).json({
 			success: false,
 			errors: errors.array(),
-			slugValidation: req.slugValidation
-		})
+			slugValidation: req.slugValidation,
+		});
 	}
 	const slug = req.body.slug;
 	const name = req.body.name;
@@ -121,28 +119,29 @@ module.exports.updateProfile = async (req, res) => {
 	req.user.slug = slug;
 	req.user.name = name;
 
-	req.user.save()
-		.then(savedUser => {
-			const profile = savedUser.getProfileInfo();
-			res.json({
-				success: true,
-				user: profile
-			});
-
-		})
-
+	req.user.save().then((savedUser) => {
+		const profile = savedUser.getProfileInfo();
+		res.json({
+			success: true,
+			user: profile,
+		});
+	});
 };
 
 module.exports.checkFreeSlug = async (req, res) => {
 	res.json({
 		status: req.slugValidation.status,
-		message: req.slugValidation.message
+		message: req.slugValidation.message,
 	});
 };
 
 function storeUserJWT(res, user) {
-	const token = jwt.sign({
-		userId: user._id.toString()
-	}, process.env.JWT_SECRET, { expiresIn: '7d' });
+	const token = jwt.sign(
+		{
+			userId: user._id.toString(),
+		},
+		process.env.JWT_SECRET,
+		{ expiresIn: '7d' },
+	);
 	cookieUpdate(res, 'jwt', token);
 }
