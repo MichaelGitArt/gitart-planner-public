@@ -73,7 +73,11 @@
 					</v-card>
 				</v-menu>
 			</template>
-			<v-btn v-if="userChecked && !user" color="warning" tag="button" to="/auth"
+			<v-btn
+				v-if="userChecked && !user"
+				color="warning"
+				tag="button"
+				:to="'/auth'"
 				>Увійти</v-btn
 			>
 		</v-container>
@@ -91,7 +95,7 @@ export default {
 		menu: false,
 	}),
 	methods: {
-		...mapActions(['logout']),
+		...mapActions('auth', ['logout']),
 	},
 };
 </script>

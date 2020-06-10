@@ -109,7 +109,7 @@ export default router;
 // Check authentication status
 function authStatus(status = false) {
 	return (to, from, next) => {
-		if (store.getters['auth/user']) {
+		if (store.getters['auth/userChecked']) {
 			authStatusSwitch(status, store.getters['auth/user'], next, from);
 		} else {
 			store.watch(
