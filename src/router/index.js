@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import multiguard from 'vue-router-multiguard';
+import multiGuard from 'vue-router-multiguard';
 
 import Home from '@/views/Home.vue';
 import ProfileGeneral from '@/views/Profile/General.vue';
@@ -60,13 +60,23 @@ const routes = [
 		path: '/group/:code',
 		name: 'GroupSingle',
 		component: GroupSingle,
+		beforeEnter: multiGuard([
+			authStatus(true),
+			(to, from, next) => {
+				store.dispatch('group/fetchGroup', to.params.code).then(() => {
+					next();
+				});
+			},
+		]),
 	},
 	{
 		path: '/group-add',
 		name: 'GroupAdd',
-		beforeEnter: multiguard([
+		beforeEnter: multiGuard([
 			authStatus(true),
 			(to, from, next) => {
+				// If we are on top level route for adding group, move to child.
+				// In the top level we have only tabs
 				if (to.name === 'GroupAdd') {
 					next({ name: 'GroupCreate' });
 				}
@@ -99,13 +109,13 @@ export default router;
 // Check authentication status
 function authStatus(status = false) {
 	return (to, from, next) => {
-		if (store.getters.userChecked) {
-			authStatusSwitch(status, store.getters.user, next, from);
+		if (store.getters['auth/user']) {
+			authStatusSwitch(status, store.getters['auth/user'], next, from);
 		} else {
 			store.watch(
 				(state) => state.auth.checked,
 				() => {
-					authStatusSwitch(status, store.getters.user, next, from);
+					authStatusSwitch(status, store.getters['auth/user'], next, from);
 				},
 			);
 		}

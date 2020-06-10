@@ -1,6 +1,7 @@
 import groupService from '@/services/groupService';
 
 export default {
+	namespaced: true,
 	state: {
 		groups: [],
 	},
@@ -27,6 +28,15 @@ export default {
 				if (data.success) {
 					commit('setGroups', data.groups);
 				}
+			});
+		},
+		fetchGroup({ commit }, groupCode) {
+			return new Promise((resolve) => {
+				// groupService.getGroup(groupCode).then(({ data }) => {
+				// 	console.log(data);
+				// 	resolve(data);
+				// });
+				resolve(true);
 			});
 		},
 		createGroup({ commit }, name) {

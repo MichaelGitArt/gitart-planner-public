@@ -2,48 +2,47 @@ import router from '../router';
 import authService from '@/services/authService';
 
 export default {
+	namespaced: true,
 	state: {
 		user: null,
-		checked: false
+		checked: false,
 	},
 	mutations: {
 		setUser(state, user) {
 			if (typeof user === 'object') {
 				state.user = user;
 			} else {
-				state.user = null
+				state.user = null;
 			}
 			state.checked = true;
-		}
+		},
 	},
 	actions: {
 		checkUser({ commit, dispatch }) {
 			authService.check().then(({ data }) => {
 				if (data.auth) {
-					commit("setUser", data.user);
-					dispatch("fetchGroups");
+					commit('setUser', data.user);
+					dispatch('group/fetchGroups', null, { root: true });
 					return;
 				}
-				commit("setUser", null);
+				commit('setUser', null);
 			});
 		},
 		logout({ commit }) {
-			authService.logout()
-				.then(({ data }) => {
-					if (data.success) {
-						commit('setUser', null);
-						if (router.currentRoute.path !== '/') {
-							router.push("/");
-						}
+			authService.logout().then(({ data }) => {
+				if (data.success) {
+					commit('setUser', null);
+					if (router.currentRoute.path !== '/') {
+						router.push('/');
 					}
-				});
+				}
+			});
 		},
 		getProfile(ctx, slug) {
-			return authService.getProfile(slug)
-				.then(({ data }) => {
-					return data.user;
-				})
-		}
+			return authService.getProfile(slug).then(({ data }) => {
+				return data.user;
+			});
+		},
 	},
 	getters: {
 		userChecked(state) {
@@ -51,6 +50,6 @@ export default {
 		},
 		user(state) {
 			return state.user;
-		}
-	}
-}
+		},
+	},
+};

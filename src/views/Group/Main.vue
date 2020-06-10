@@ -13,6 +13,7 @@
 					<div class="d-flex align-center py-3 px-4">
 						<router-link
 							tag="h4"
+							class="title"
 							:to="{ name: 'GroupSingle', params: { code: group.code } }"
 						>
 							{{ group.name }}
@@ -26,9 +27,13 @@
 						</v-btn>
 					</div>
 					<v-footer
-						class="mt-3 green white--text lighten-1 text-right justify-end"
+						class="mt-3  lighten-1 text-right justify-space-between "
+						:class="{
+							'green white--text': group.isAdmin,
+						}"
 					>
-						Учасників: {{ group.countMembers }}
+						<span>{{ group.isAdmin ? 'Староста' : 'Учасник' }}</span>
+						<span>Учасників: {{ group.countMembers }}</span>
 					</v-footer>
 				</v-card>
 			</v-col>
@@ -40,7 +45,7 @@
 import { mapGetters } from 'vuex';
 export default {
 	computed: {
-		...mapGetters(['getGroups']),
+		...mapGetters('group', ['getGroups']),
 	},
 };
 </script>

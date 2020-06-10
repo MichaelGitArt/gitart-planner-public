@@ -1,6 +1,9 @@
 <template>
 	<v-container>
-		Group single!
+		<base-content-card icon="mdi-account-group" title="Група">
+			<v-divider class="mb-3"></v-divider>
+			Контент
+		</base-content-card>
 	</v-container>
 </template>
 

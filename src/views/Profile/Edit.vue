@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<base-page-back route="/myprofile" class="mb-5">
+		<base-page-back :route="{ name: 'MyProfile' }" class="mb-5">
 			<h2>Редагування</h2>
 		</base-page-back>
 
@@ -114,7 +114,7 @@ export default {
 				.updateProfile(this.user.slug, updateObj)
 				.then(({ data }) => {
 					if (data.success) {
-						this.$store.commit('setUser', data.user);
+						this.$store.commit('auth/setUser', data.user);
 						this.alert.type = 'success';
 						this.alert.value = 'Профіль оновлено!';
 					}
@@ -180,7 +180,7 @@ export default {
 				//	Returned hint
 				this.slugHint = res.message;
 			} else {
-				// Returne status "false"
+				// Return status "false"
 				this.slugHint = 'Нік вільний';
 			}
 		},
