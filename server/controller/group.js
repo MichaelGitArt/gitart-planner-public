@@ -1,5 +1,6 @@
 const Group = require('../model/group');
 const Member = require('../model/member');
+const User = require('../model/user');
 const errorMessages = require('../libs/response-messages');
 
 module.exports.createGroup = async (req, res) => {
@@ -31,6 +32,68 @@ module.exports.createGroup = async (req, res) => {
 			code: group.code,
 			isAdmin: true,
 		},
+	});
+};
+
+module.exports.getGroup = async (req, res) => {
+	const groupCode = req.params.code;
+	console.log('groupCode', groupCode);
+	const group = await Group.findOne({ code: groupCode });
+	console.log('group: ', group);
+	Member.aggregate([
+		{
+			$match: {
+				group: group._id,
+			},
+		},
+		{
+			$lookup: {
+				from: User.collection.name,
+				let: { curGroup: '$group', curUser: '$user' },
+				pipeline: [
+					{
+						$match: {
+							$expr: {
+								$eq: ['$_id', '$$curUser'],
+							},
+						},
+					},
+					{
+						$project: {
+							name: true,
+							slug: true,
+						},
+					},
+				],
+				as: 'user',
+			},
+		},
+		{ $unwind: '$user' },
+		{
+			$project: {
+				_id: false,
+				role: true,
+				name: '$user.name',
+				slug: '$user.slug',
+			},
+		},
+	]).exec((err, foundedUsers) => {
+		if (err) {
+			console.log(err);
+			return res.json({
+				success: false,
+				originalError: err,
+				message: errorMessages.errors.notFoundError,
+			});
+		}
+
+		res.json({
+			success: true,
+			group: {
+				name: group.name,
+				users: foundedUsers,
+			},
+		});
 	});
 };
 

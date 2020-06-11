@@ -60,10 +60,14 @@ const routes = [
 		path: '/group/:code',
 		name: 'GroupSingle',
 		component: GroupSingle,
+		props: true,
 		beforeEnter: multiGuard([
 			authStatus(true),
 			(to, from, next) => {
-				store.dispatch('group/fetchGroup', to.params.code).then(() => {
+				let time2 = Date.now();
+				store.dispatch('group/fetchGroup', to.params.code).then((result) => {
+					console.log(Date.now() - time2);
+					to.params.group = result.group;
 					next();
 				});
 			},

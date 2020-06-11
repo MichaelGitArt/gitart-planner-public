@@ -30,13 +30,12 @@ export default {
 				}
 			});
 		},
-		fetchGroup({ commit }, groupCode) {
+		fetchGroup(_, groupCode) {
 			return new Promise((resolve) => {
-				// groupService.getGroup(groupCode).then(({ data }) => {
-				// 	console.log(data);
-				// 	resolve(data);
-				// });
-				resolve(true);
+				groupService.getGroup(groupCode).then(({ data }) => {
+					// Todo check for success status
+					resolve(data);
+				});
 			});
 		},
 		createGroup({ commit }, name) {
