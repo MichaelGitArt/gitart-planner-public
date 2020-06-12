@@ -32,7 +32,7 @@
 			</v-stepper-content>
 
 			<v-stepper-step :complete="stage > 2" step="2"
-				>Твоя нова група</v-stepper-step
+				>Група створена!</v-stepper-step
 			>
 
 			<v-stepper-content step="2">

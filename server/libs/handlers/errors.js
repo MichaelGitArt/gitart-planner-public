@@ -17,22 +17,10 @@ module.exports.catchErrors = (fn) => {
  */
 module.exports.handleErrors = (err, res) => {
 	const { statusCode, message } = err;
-	let defMessage;
-	switch (statusCode) {
-		case 404:
-			defMessage = errorMessages.errors.notFoundError;
-			break;
-		case 403:
-			defMessage = errorMessages.errors.accessDenied;
-			break;
-		default:
-			defMessage = errorMessages.errors.errorMessages.errors.unexpectedError;
-	}
 
 	res.status(statusCode || 500).json({
 		success: false,
 		statusCode: statusCode || 500,
-		originalError: message,
-		message: defMessage,
+		message: message || errorMessages.errors.unexpectedError,
 	});
 };

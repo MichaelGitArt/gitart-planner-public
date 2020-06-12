@@ -43,4 +43,11 @@ groupSchema.methods.addMember = async function(user, role = 'member') {
 	await user.save();
 };
 
+groupSchema.methods.hasMember = async function(user) {
+	return Member.findOne({
+		user: user._id,
+		group: this._id,
+	});
+};
+
 module.exports = mongoose.model('Group', groupSchema);

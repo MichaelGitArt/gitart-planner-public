@@ -1,7 +1,12 @@
 const Group = require('../model/group');
 const Member = require('../model/member');
 const User = require('../model/user');
-const { NotFoundError, AccessDenied } = require('../libs/errors');
+const {
+	NotFoundError,
+	AccessDenied,
+	InvalidRequestError,
+	UnexpectedError,
+} = require('../libs/errors');
 
 module.exports.createGroup = async (req, res) => {
 	const groupName = req.body.name;
@@ -30,6 +35,11 @@ module.exports.joinGroup = async (req, res) => {
 		throw NotFoundError('Група не знайдена');
 	}
 
+	const isMember = await group.hasMember(req.user);
+	if (isMember) {
+		throw InvalidRequestError('Ти вже учасник цієї групи');
+	}
+
 	await group.addMember(req.user, 'member');
 
 	return res.json({
@@ -51,12 +61,9 @@ module.exports.getGroup = async (req, res) => {
 		throw NotFoundError('Група не знайдена');
 	}
 
-	const groupMembership = await Member.findOne({
-		user: req.user,
-		group: group._id,
-	});
+	const isMember = await group.hasMember(req.user);
 
-	if (!groupMembership) {
+	if (!isMember) {
 		throw AccessDenied();
 	}
 
@@ -99,7 +106,7 @@ module.exports.getGroup = async (req, res) => {
 		},
 	]).exec((err, foundedUsers) => {
 		if (err) {
-			throw NotFoundError();
+			throw UnexpectedError();
 		}
 
 		res.json({
@@ -140,7 +147,7 @@ module.exports.getGroups = async (req, res) => {
 		},
 	]).exec((err, groups) => {
 		if (err) {
-			throw NotFoundError('Група не знайдена');
+			throw UnexpectedError();
 		}
 
 		res.json({

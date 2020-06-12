@@ -15,9 +15,17 @@ module.exports.InvalidRequestError = (
 };
 
 module.exports.NotFoundError = (message = resMessages.errors.notFoundError) => {
-	return httpErrors(404, message, { id: 'not_found' });
+	return httpErrors(404, message, {
+		id: 'not_found',
+	});
 };
 
 module.exports.AccessDenied = (message = resMessages.errors.accessDenied) => {
 	return httpErrors(403, message, { id: 'access_denied' });
+};
+
+module.exports.UnexpectedError = (
+	message = resMessages.errors.unexpectedError,
+) => {
+	return httpErrors(500, message, { id: 'unexpected_error' });
 };

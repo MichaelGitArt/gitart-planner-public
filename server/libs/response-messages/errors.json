@@ -1,5 +1,5 @@
 {
-	"invalidRequestError": "Помилка у запиты",
+	"invalidRequestError": "Помилка у запиті",
 	"notFoundError": "Ресурс не знайдено",
 	"authenticationError": "Аторизація не дійсна",
 	"validationError": "Щось пішло не так. Перевір поля та сробуй знову",
