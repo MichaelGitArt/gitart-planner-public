@@ -8,11 +8,11 @@
 
 		<the-menu :nav="navLinks" v-model="drawer"></the-menu>
 
-		<v-content>
+		<v-main>
 			<transition name="fade-slide" mode="out-in" appear>
 				<router-view></router-view>
 			</transition>
-		</v-content>
+		</v-main>
 	</v-app>
 </template>
 
