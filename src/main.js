@@ -1,4 +1,7 @@
 import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -15,6 +18,7 @@ import '@/scss/main.scss';
 Vue.config.productionTip = false;
 
 Vue.use(userExpration);
+Vue.use(VueToast);
 
 new Vue({
 	router,
