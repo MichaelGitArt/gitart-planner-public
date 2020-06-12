@@ -1,7 +1,7 @@
 const Group = require('../model/group');
 const Member = require('../model/member');
 const User = require('../model/user');
-const errorMessages = require('../libs/response-messages');
+const { NotFoundError, AccessDenied } = require('../libs/errors');
 
 module.exports.createGroup = async (req, res) => {
 	const groupName = req.body.name;
@@ -9,20 +9,7 @@ module.exports.createGroup = async (req, res) => {
 	const group = new Group({
 		name: groupName,
 	});
-	await group.save();
-
-	const member = new Member({
-		group: group._id.toString(),
-		user: req.user._id.toString(),
-		role: 'admin',
-	});
-	await member.save();
-
-	// Add membership to group and user
-	group.members.push(member);
-	req.user.membership.push(member);
-	await group.save();
-	await req.user.save();
+	await group.addMember(req.user, 'admin');
 
 	return res.json({
 		success: true,
@@ -40,27 +27,13 @@ module.exports.joinGroup = async (req, res) => {
 
 	const group = await Group.findOne({ code: groupCode });
 	if (!group) {
-		const error = new Error('Група не знайдена');
-		error.statusCode = 404;
-		throw error;
+		throw NotFoundError('Група не знайдена');
 	}
 
-	const member = new Member({
-		group: group._id.toString(),
-		user: req.user._id.toString(),
-		role: 'member',
-	});
-	await member.save();
-
-	// Add membership to group and user
-	group.members.push(member);
-	req.user.membership.push(member);
-	await group.save();
-	await req.user.save();
+	await group.addMember(req.user, 'member');
 
 	return res.json({
 		success: true,
-		message: 'Ти приєднався!',
 		group: {
 			name: group.name,
 			code: group.code,
@@ -75,9 +48,7 @@ module.exports.getGroup = async (req, res) => {
 	const group = await Group.findOne({ code: groupCode });
 
 	if (!group) {
-		const error = new Error('Група не знайдена');
-		error.statusCode = 404;
-		throw error;
+		throw NotFoundError('Група не знайдена');
 	}
 
 	const groupMembership = await Member.findOne({
@@ -86,9 +57,7 @@ module.exports.getGroup = async (req, res) => {
 	});
 
 	if (!groupMembership) {
-		const error = new Error('Доступ закритий');
-		error.statusCode = 403;
-		throw error;
+		throw AccessDenied();
 	}
 
 	Member.aggregate([
@@ -130,9 +99,7 @@ module.exports.getGroup = async (req, res) => {
 		},
 	]).exec((err, foundedUsers) => {
 		if (err) {
-			const error = new Error();
-			error.statusCode = 404;
-			throw error;
+			throw NotFoundError();
 		}
 
 		res.json({
@@ -173,11 +140,7 @@ module.exports.getGroups = async (req, res) => {
 		},
 	]).exec((err, groups) => {
 		if (err) {
-			return res.json({
-				success: false,
-				originalError: err,
-				message: errorMessages.errors.notFoundError,
-			});
+			throw NotFoundError('Група не знайдена');
 		}
 
 		res.json({

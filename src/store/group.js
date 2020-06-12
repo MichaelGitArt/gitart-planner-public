@@ -58,12 +58,6 @@ export default {
 						code: data.group.code,
 						countMembers: data.group.countMembers,
 					});
-				} else {
-					console.log('joinGroup is not succeed');
-					Vue.$toast({
-						message: data.message,
-						type: 'error',
-					});
 				}
 				return data;
 			});

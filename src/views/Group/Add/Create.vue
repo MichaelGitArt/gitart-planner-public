@@ -113,7 +113,7 @@ export default {
 				if (!valid) return;
 				this.loading = true;
 				this.$store
-					.dispatch('group/joinGroup', this.name)
+					.dispatch('group/createGroup', this.name)
 					.then((result) => {
 						if (result.success) {
 							this.createdGroup = result.group;
