@@ -22,10 +22,6 @@
 							>Приєднатися</v-btn
 						>
 					</v-form>
-					<content-alert
-						v-model="alert.value"
-						:type="alert.type"
-					></content-alert>
 				</validation-observer>
 			</v-stepper-content>
 
@@ -64,13 +60,11 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import ContentAlert from '@/components/General/ContentAlert';
 
 export default {
 	components: {
 		ValidationProvider,
 		ValidationObserver,
-		ContentAlert,
 	},
 	data: () => ({
 		stage: 1,
@@ -79,14 +73,9 @@ export default {
 		result: null,
 		createdGroup: null,
 		isVisibleTooltip: false,
-		alert: {
-			value: '',
-			type: 'error',
-		},
 	}),
 	methods: {
 		handleJoin() {
-			this.alert.value = '';
 			this.$refs.observer.validate().then((valid) => {
 				if (!valid) return;
 				this.loading = true;
@@ -97,12 +86,16 @@ export default {
 							this.createdGroup = result.group;
 							this.stage++;
 						} else {
-							this.alert.value = result.message;
+							this.$toast.error(result.message, {
+								duration: 5000,
+							});
 						}
 					})
 					.catch((err) => {
 						console.log('err', err);
-						this.alert.value = err.message;
+						this.$toast.error(err.message, {
+							duration: 5000,
+						});
 					})
 					.finally(() => {
 						this.loading = false;

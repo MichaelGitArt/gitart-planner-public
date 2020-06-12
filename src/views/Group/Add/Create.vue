@@ -24,10 +24,6 @@
 							>Створити</v-btn
 						>
 					</v-form>
-					<content-alert
-						v-model="alert.value"
-						:type="alert.type"
-					></content-alert>
 				</validation-observer>
 			</v-stepper-content>
 
@@ -84,14 +80,12 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import ContentAlert from '@/components/General/ContentAlert';
 import toClipboard from '@/utils/toClipboard';
 
 export default {
 	components: {
 		ValidationProvider,
 		ValidationObserver,
-		ContentAlert,
 	},
 	data: () => ({
 		stage: 1,
@@ -100,10 +94,6 @@ export default {
 		result: null,
 		createdGroup: null,
 		isVisibleTooltip: false,
-		alert: {
-			value: '',
-			type: 'error',
-		},
 	}),
 
 	methods: {
@@ -119,12 +109,16 @@ export default {
 							this.createdGroup = result.group;
 							this.stage++;
 						} else {
-							this.alert.value = result.message;
+							this.$toast.error(result.message, {
+								duration: 5000,
+							});
 						}
 					})
 					.catch((err) => {
 						console.log('catch here');
-						this.alert.value = err.message;
+						this.$toast.error(err.message, {
+							duration: 5000,
+						});
 					})
 					.finally(() => {
 						this.loading = false;
