@@ -1,4 +1,5 @@
-const errorMessages = require('@server/libs/response-messages');
+// const errorMessages = require('@server/libs/response-messages');
+const errorMessages = require('../response-messages');
 
 /**
  * Instead of using try{} catch(e){} in each controller, we wrap functions in
