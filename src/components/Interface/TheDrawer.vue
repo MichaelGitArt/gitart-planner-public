@@ -7,7 +7,12 @@
 		dark
 		color="green"
 	>
-		<v-list-item two-line :to="{ name: 'MyProfile' }" class="white--text">
+		<v-list-item
+			v-if="user"
+			two-line
+			:to="{ name: 'MyProfile' }"
+			class="white--text"
+		>
 			<v-list-item-avatar class="my-2">
 				<img
 					src="@/assets/images/general/profile-placeholder.png"

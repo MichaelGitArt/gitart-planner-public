@@ -7,7 +7,7 @@ import store from '@/store';
 import ProfileLayout from '@/components/Pages/Profile/Layout';
 
 function getProfile(to, next) {
-	if (to.params.slug === store.getters.user.slug) {
+	if (to.params.slug === store.getters['auth/user'].slug) {
 		return next({ name: 'MyProfile' });
 	}
 	store.dispatch('auth/getProfile', to.params.slug).then((profile) => {

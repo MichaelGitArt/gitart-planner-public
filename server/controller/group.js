@@ -35,11 +35,62 @@ module.exports.createGroup = async (req, res) => {
 	});
 };
 
+module.exports.joinGroup = async (req, res) => {
+	const groupCode = req.body.code;
+
+	const group = await Group.findOne({ code: groupCode });
+	if (!group) {
+		const error = new Error('Група не знайдена');
+		error.statusCode = 404;
+		throw error;
+	}
+
+	const member = new Member({
+		group: group._id.toString(),
+		user: req.user._id.toString(),
+		role: 'member',
+	});
+	await member.save();
+
+	// Add membership to group and user
+	group.members.push(member);
+	req.user.membership.push(member);
+	await group.save();
+	await req.user.save();
+
+	return res.json({
+		success: true,
+		message: 'Ти приєднався!',
+		group: {
+			name: group.name,
+			code: group.code,
+			isAdmin: false,
+			countMembers: group.members.length,
+		},
+	});
+};
+
 module.exports.getGroup = async (req, res) => {
 	const groupCode = req.params.code;
-	console.log('groupCode', groupCode);
 	const group = await Group.findOne({ code: groupCode });
-	console.log('group: ', group);
+
+	if (!group) {
+		const error = new Error('Група не знайдена');
+		error.statusCode = 404;
+		throw error;
+	}
+
+	const groupMembership = await Member.findOne({
+		user: req.user,
+		group: group._id,
+	});
+
+	if (!groupMembership) {
+		const error = new Error('Доступ закритий');
+		error.statusCode = 403;
+		throw error;
+	}
+
 	Member.aggregate([
 		{
 			$match: {
@@ -79,25 +130,23 @@ module.exports.getGroup = async (req, res) => {
 		},
 	]).exec((err, foundedUsers) => {
 		if (err) {
-			console.log(err);
-			return res.json({
-				success: false,
-				originalError: err,
-				message: errorMessages.errors.notFoundError,
-			});
+			const error = new Error();
+			error.statusCode = 404;
+			throw error;
 		}
 
 		res.json({
 			success: true,
 			group: {
 				name: group.name,
+				code: group.code,
 				users: foundedUsers,
 			},
 		});
 	});
 };
 
-module.exports.getGroups = (req, res) => {
+module.exports.getGroups = async (req, res) => {
 	Member.aggregate([
 		{
 			$match: {

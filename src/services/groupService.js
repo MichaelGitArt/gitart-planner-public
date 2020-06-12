@@ -10,4 +10,7 @@ export default {
 	create(name) {
 		return apiClient.post('group/create', { name });
 	},
+	join(code) {
+		return apiClient.post('group/join', { code });
+	},
 };

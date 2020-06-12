@@ -67,8 +67,22 @@ const routes = [
 				let time2 = Date.now();
 				store.dispatch('group/fetchGroup', to.params.code).then((result) => {
 					console.log(Date.now() - time2);
-					to.params.group = result.group;
-					next();
+					if (result.success) {
+						to.params.group = result.group;
+						next();
+					} else {
+						switch (result.statusCode) {
+							case 404:
+								next('/404');
+								break;
+							default:
+								next(from);
+								store.$toast.open({
+									message: result.statusCode + ': ' + result.message,
+									type: 'error',
+								});
+						}
+					}
 				});
 			},
 		]),
@@ -100,6 +114,15 @@ const routes = [
 				component: GroupCreate,
 			},
 		],
+	},
+	{
+		path: '/404',
+		name: 'NotFound',
+		component: () => import('@/views/Error/404.vue'),
+	},
+	{
+		path: '*',
+		component: () => import('@/views/Error/404.vue'),
 	},
 ];
 

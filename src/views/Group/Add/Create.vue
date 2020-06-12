@@ -113,7 +113,7 @@ export default {
 				if (!valid) return;
 				this.loading = true;
 				this.$store
-					.dispatch('group/createGroup', this.name)
+					.dispatch('group/joinGroup', this.name)
 					.then((result) => {
 						if (result.success) {
 							this.createdGroup = result.group;
@@ -121,6 +121,10 @@ export default {
 						} else {
 							this.alert.value = result.message;
 						}
+					})
+					.catch((err) => {
+						console.log('catch here');
+						this.alert.value = err.message;
 					})
 					.finally(() => {
 						this.loading = false;
