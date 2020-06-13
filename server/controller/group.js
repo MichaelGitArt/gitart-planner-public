@@ -104,7 +104,7 @@ module.exports.getGroup = async (req, res) => {
 				slug: '$user.slug',
 			},
 		},
-	]).exec((err, foundedUsers) => {
+	]).exec((err, foundedMembers) => {
 		if (err) {
 			throw UnexpectedError();
 		}
@@ -114,7 +114,7 @@ module.exports.getGroup = async (req, res) => {
 			group: {
 				name: group.name,
 				code: group.code,
-				users: foundedUsers,
+				members: foundedMembers,
 			},
 		});
 	});

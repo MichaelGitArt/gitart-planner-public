@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import multiGuard from 'vue-router-multiguard';
 
 import Home from '@/views/Home.vue';
 import ProfileGeneral from '@/views/Profile/General.vue';
@@ -11,7 +10,11 @@ import GroupMain from '@/views/Group/Main';
 import GroupAdd from '@/views/Group/Add/Main';
 import GroupJoin from '@/views/Group/Add/Join';
 import GroupCreate from '@/views/Group/Add/Create';
+
 import GroupSingle from '@/views/Group/Single/Main';
+import GroupSingleFlow from '@/views/Group/Single/Flow';
+import GroupSingleMembers from '@/views/Group/Single/Members';
+import GroupSingleSchedule from '@/views/Group/Single/Schedule';
 
 import store from '@/store';
 
@@ -61,47 +64,34 @@ const routes = [
 		name: 'GroupSingle',
 		component: GroupSingle,
 		props: true,
-		beforeEnter: multiGuard([
-			authStatus(true),
-			(to, from, next) => {
-				let time2 = Date.now();
-				store.dispatch('group/fetchGroup', to.params.code).then((result) => {
-					console.log(Date.now() - time2);
-					if (result.success) {
-						to.params.group = result.group;
-						next();
-					} else {
-						switch (result.statusCode) {
-							case 404:
-								next('/404');
-								break;
-							default:
-								next(from);
-								store.$toast.open({
-									message: result.statusCode + ': ' + result.message,
-									type: 'error',
-								});
-						}
-					}
-				});
+		beforeEnter: authStatus(true),
+		redirect: { name: 'GroupSingleFlow' },
+		children: [
+			{
+				path: '/',
+				props: true,
+
+				name: 'GroupSingleFlow',
+				component: GroupSingleFlow,
 			},
-		]),
+			{
+				path: 'm',
+				name: 'GroupSingleMembers',
+				component: GroupSingleMembers,
+			},
+			{
+				path: 's',
+				name: 'GroupSingleSchedule',
+				component: GroupSingleSchedule,
+			},
+		],
 	},
 	{
 		path: '/group-add',
 		name: 'GroupAdd',
-		beforeEnter: multiGuard([
-			authStatus(true),
-			(to, from, next) => {
-				// If we are on top level route for adding group, move to child.
-				// In the top level we have only tabs
-				if (to.name === 'GroupAdd') {
-					next({ name: 'GroupCreate' });
-				}
-				next();
-			},
-		]),
+		beforeEnter: authStatus(true),
 		component: GroupAdd,
+		redirect: { name: 'GroupCreate' },
 		children: [
 			{
 				path: 'join',

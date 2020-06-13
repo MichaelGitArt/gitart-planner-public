@@ -1,8 +1,11 @@
-import Vue from 'vue';
 import groupService from '@/services/groupService';
+import groupSingleStore from './single';
 
 export default {
 	namespaced: true,
+	modules: {
+		single: groupSingleStore,
+	},
 	state: {
 		groups: [],
 	},
@@ -33,7 +36,9 @@ export default {
 		},
 		fetchGroup(_, groupCode) {
 			return new Promise((resolve) => {
-				groupService.getGroup(groupCode).then(({ data }) => resolve(data));
+				groupService.getGroup(groupCode).then(({ data }) => {
+					resolve(data);
+				});
 			});
 		},
 		createGroup({ commit }, name) {
