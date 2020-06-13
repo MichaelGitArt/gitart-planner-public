@@ -1,14 +1,5 @@
 <template>
-	<profile-layout :profile="user">
-		<template #header>
-			<v-btn
-				:to="{ name: 'MyProfileEdit' }"
-				icon
-				class="profile-header__settings-icon"
-			>
-				<img src="@/assets/images/icons/ic_work_tool.svg" alt="Налаштування" />
-			</v-btn>
-		</template>
+	<profile-layout :profile="user" personal>
 		<router-view></router-view>
 	</profile-layout>
 </template>

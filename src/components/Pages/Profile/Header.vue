@@ -13,6 +13,14 @@
 			<h4 class="title" v-text="profile.name" />
 			<slot></slot>
 		</v-list-item-content>
+		<v-btn
+			v-if="settingsIcon"
+			:to="{ name: 'MyProfileEdit' }"
+			icon
+			class="profile-header__settings-icon"
+		>
+			<v-icon color="success lighten-1">mdi-cog</v-icon>
+		</v-btn>
 	</v-list-item>
 </template>
 
@@ -22,6 +30,10 @@ export default {
 		profile: {
 			type: Object,
 			required: true,
+		},
+		settingsIcon: {
+			type: Boolean,
+			default: false,
 		},
 	},
 };
