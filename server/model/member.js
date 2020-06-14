@@ -20,4 +20,8 @@ const memberSchema = new Schema(
 	{ timestamp: true },
 );
 
+memberSchema.virtual('isAdmin').get(function() {
+	return this.role === 'admin';
+});
+
 module.exports = mongoose.model('Member', memberSchema);

@@ -115,6 +115,7 @@ module.exports.getGroup = async (req, res) => {
 				name: group.name,
 				code: group.code,
 				members: foundedMembers,
+				isAdmin: isMember.isAdmin,
 			},
 		});
 	});

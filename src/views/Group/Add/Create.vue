@@ -98,7 +98,6 @@ export default {
 
 	methods: {
 		handleCreate() {
-			this.alert.value = '';
 			this.$refs.observer.validate().then((valid) => {
 				if (!valid) return;
 				this.loading = true;
