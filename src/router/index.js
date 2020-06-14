@@ -15,6 +15,7 @@ import GroupSingle from '@/views/Group/Single/Main';
 import GroupSingleFlow from '@/views/Group/Single/Flow';
 import GroupSingleMembers from '@/views/Group/Single/Members';
 import GroupSingleSchedule from '@/views/Group/Single/Schedule';
+import GroupSingleSettings from '@/views/Group/Single/Settings';
 
 import store from '@/store';
 
@@ -83,6 +84,24 @@ const routes = [
 				path: 's',
 				name: 'GroupSingleSchedule',
 				component: GroupSingleSchedule,
+			},
+			{
+				path: 'admin',
+				name: 'GroupSingleSettings',
+				component: GroupSingleSettings,
+				beforeEnter(to, from, next) {
+					store
+						.dispatch('group/single/getGroup', to.params.code)
+						.then((group) => {
+							if (group.isAdmin) return next();
+
+							store.$toast.error('Сорі, але ти не адміністатор групи');
+							next({
+								name: 'GroupSingleFlow',
+								params: { code: to.params.code },
+							});
+						});
+				},
 			},
 		],
 	},

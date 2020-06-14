@@ -40,6 +40,7 @@ export default {
 				});
 			});
 		},
+		leaveGroup() {},
 	},
 	getters: {
 		members(state) {

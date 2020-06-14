@@ -2,12 +2,15 @@
 	<v-container>
 		<base-content-card icon="mdi-account-group">
 			<template #after-heading>
-				<v-skeleton-loader type="heading" v-if="loading" class="mb-2">
-				</v-skeleton-loader>
-				<v-skeleton-loader type="text" v-if="loading"> </v-skeleton-loader>
+				<v-skeleton-loader type="heading" v-if="loading" class="mb-2" />
+				<v-skeleton-loader type="text" v-if="loading" />
 				<template v-else>
 					<div class="text-lg-h5 text-h6 mb-1" v-text="group.name" />
 					<p class="ma-0 caption header-code" v-text="code" />
+					<single-group-fast-action
+						v-if="!loading"
+						:is-admin="group && group.isAdmin"
+					/>
 				</template>
 			</template>
 
@@ -24,14 +27,18 @@
 			</template>
 
 			<template v-else>
-				<v-tabs>
-					<v-tab v-for="tab in tabs" :to="tab.to" :key="tab.to.name">{{
-						tab.name
-					}}</v-tab>
+				<v-tabs color="success" :hide-slider="isSettings">
+					<v-tab
+						class="green--text"
+						v-for="tab in tabs"
+						:to="tab.to"
+						:key="tab.to.name"
+						>{{ tab.name }}</v-tab
+					>
 				</v-tabs>
-				<v-divider class="mb-3"></v-divider>
+				<v-divider class="mb-3" />
 
-				<router-view></router-view>
+				<router-view />
 			</template>
 		</base-content-card>
 	</v-container>
@@ -39,8 +46,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import SingleGroupFastAction from '@/components/Pages/Group/SingleGroupFastAction';
 
 export default {
+	components: {
+		SingleGroupFastAction,
+	},
 	props: {
 		code: {
 			type: String,
@@ -68,13 +79,16 @@ export default {
 			},
 		],
 	}),
-	computed: {
-		...mapGetters('group/single', ['group']),
-	},
 	mounted() {
 		this.$store.dispatch('group/single/getGroup', this.code).then(() => {
 			this.loading = false;
 		});
+	},
+	computed: {
+		...mapGetters('group/single', ['group']),
+		isSettings() {
+			return this.$route.name === 'GroupSingleSettings';
+		},
 	},
 };
 </script>
