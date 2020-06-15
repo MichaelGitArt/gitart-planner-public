@@ -1,5 +1,6 @@
 module.exports = {
 	transpileDependencies: ['vuetify'],
+	productionSourceMap: false,
 	devServer: {
 		port: 3000,
 		proxy: {
