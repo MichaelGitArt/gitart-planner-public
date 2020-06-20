@@ -25,6 +25,9 @@ export default {
 		setGroups(state, groups) {
 			state.groups.push(...groups);
 		},
+		removeGroup(state, code) {
+			state.groups = state.groups.filter((group) => group.code !== code);
+		},
 	},
 	actions: {
 		fetchGroups({ commit }) {

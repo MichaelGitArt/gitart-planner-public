@@ -157,3 +157,45 @@ module.exports.getGroups = async (req, res) => {
 		});
 	});
 };
+
+module.exports.removeMember = async (req, res) => {
+	const { groupCode, userSlug } = req.body;
+	const group = await Group.findOne().byCode(groupCode);
+	const user = await User.findOne().bySlug(userSlug);
+	const membership = await Member.findOne({
+		user: user._id,
+		group: group._id,
+	});
+
+	if (!membership) {
+		throw InvalidRequestError();
+	}
+
+	//	User leaves some group
+	if (userSlug === user.slug) {
+		// User is admin
+		if (membership.isAdmin) {
+			const administratorsCount = await group.getAdministratorsCount();
+
+			// Do not leave group without administrator
+			if (administratorsCount <= 1)
+				throw InvalidRequestError(
+					'Ти останій староста групи. Признач старостою іншого учасника або видали групу в панелі керування групою',
+				);
+
+			await membership.removeMembership(group, user);
+		}
+		//	User is not admin
+		else {
+			await membership.removeMembership(group, user);
+		}
+	}
+	//	Admin removes member
+	else {
+		console.log('Try to remove else user');
+	}
+
+	return res.json({
+		success: true,
+	});
+};

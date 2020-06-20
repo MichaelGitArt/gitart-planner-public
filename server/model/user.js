@@ -36,6 +36,10 @@ const userSchema = new Schema(
 	{ timestamp: true },
 );
 
+userSchema.query.bySlug = function(slug) {
+	return this.findOne({ slug });
+};
+
 userSchema.methods.getProfileInfo = function() {
 	return {
 		name: this.name,

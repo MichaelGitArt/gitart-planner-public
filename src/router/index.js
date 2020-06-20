@@ -95,7 +95,7 @@ const routes = [
 						.then((group) => {
 							if (group.isAdmin) return next();
 
-							store.$toast.error('Сорі, але ти не адміністатор групи');
+							store.$toast.error('Сорі, але ти не староста групи');
 							next({
 								name: 'GroupSingleFlow',
 								params: { code: to.params.code },

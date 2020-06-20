@@ -76,6 +76,28 @@
 				</v-card-actions>
 			</v-card>
 		</v-dialog>
+
+		<v-dialog v-model="infoModal" max-width="270px">
+			<v-card>
+				<v-card-title class="headline">Щось пішло не так</v-card-title>
+
+				<v-card-text>
+					{{ infoModalMessage }}
+				</v-card-text>
+				<v-card-actions class="justify-end">
+					<v-btn
+						color="green"
+						text
+						@click="
+							infoModal = false;
+							modal = false;
+						"
+					>
+						Закрити
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 	</v-container>
 </template>
 
@@ -96,6 +118,8 @@ export default {
 	data: () => ({
 		modal: false,
 		modalLoading: false,
+		infoModal: false,
+		infoModalMessage: '',
 		tabs: [
 			{
 				to: { name: 'GroupSingleFlow' },
@@ -119,7 +143,6 @@ export default {
 		this.$store.dispatch('group/single/getGroup', this.code);
 	},
 	methods: {
-		// openModal(modal)
 		confirmLeaveGroup() {
 			this.modal = true;
 		},
@@ -128,10 +151,14 @@ export default {
 			this.$store
 				.dispatch('group/single/leaveGroup')
 				.then((result) => {
-					// if (result.success) {
-					// 	this.modal = false;
-					// 	this.$router.push({ name: 'GroupMain' });
-					// }
+					if (result.success) {
+						this.modal = false;
+						this.$router.push({ name: 'GroupMain' });
+						this.$store.commit('group/single/clearState');
+					} else {
+						this.infoModalMessage = result.message;
+						this.infoModal = true;
+					}
 				})
 				.finally(() => {
 					this.modalLoading = false;
@@ -140,7 +167,7 @@ export default {
 	},
 	computed: {
 		...mapGetters('group/single', ['group']),
-		...mapState('group/single', ['actionLoading', 'loading']),
+		...mapState('group/single', ['loading']),
 		isSettingsPage() {
 			return this.$route.name === 'GroupSingleSettings';
 		},

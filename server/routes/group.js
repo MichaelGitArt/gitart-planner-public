@@ -24,5 +24,10 @@ router.post(
 	auth({ required: true }),
 	catchErrors(groupController.joinGroup),
 );
+router.post(
+	'/removeMember',
+	auth({ required: true }),
+	catchErrors(groupController.removeMember),
+);
 
 module.exports = router;

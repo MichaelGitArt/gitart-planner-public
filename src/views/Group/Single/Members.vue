@@ -13,7 +13,7 @@
 						{{ member.name }} {{ member.slug === user.slug ? '(Ти)' : '' }}
 					</v-list-item-title>
 					<v-list-item-subtitle>
-						{{ member.role === 'admin' ? 'Адміністратор' : 'Учасник' }}
+						{{ member.role === 'admin' ? 'Староста' : 'Учасник' }}
 					</v-list-item-subtitle>
 				</v-list-item-content>
 

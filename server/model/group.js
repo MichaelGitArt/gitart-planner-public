@@ -28,6 +28,10 @@ const groupSchema = new Schema(
 	{ timestamp: true },
 );
 
+groupSchema.query.byCode = function(code) {
+	return this.findOne({ code });
+};
+
 groupSchema.methods.addMember = async function(user, role = 'member') {
 	const member = new Member({
 		group: this._id.toString(),
@@ -44,9 +48,35 @@ groupSchema.methods.addMember = async function(user, role = 'member') {
 };
 
 groupSchema.methods.hasMember = async function(user) {
-	return Member.findOne({
+	return this.model('Member').findOne({
 		user: user._id,
 		group: this._id,
+	});
+};
+groupSchema.methods.getAdministratorsCount = async function() {
+	return new Promise((resolve, reject) => {
+		this.model('Member')
+			.aggregate([
+				{
+					$match: {
+						group: this._id,
+						role: 'admin',
+					},
+				},
+				{
+					$count: 'adminCount',
+				},
+			])
+			.exec((err, [founded]) => {
+				if (founded && !err) {
+					return resolve(founded.adminCount);
+				}
+				reject(
+					new Error(
+						'Не вийшло знайти іншого старости. Спробуй знову або звернися до адміністрації сайту',
+					),
+				);
+			});
 	});
 };
 

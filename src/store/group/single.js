@@ -7,7 +7,6 @@ export default {
 		group: null,
 		code: null,
 		loading: true,
-		actionLoading: false,
 	},
 	mutations: {
 		setGroup(state, group) {
@@ -19,8 +18,10 @@ export default {
 		setLoading(state, status) {
 			state.loading = status;
 		},
-		setActionLoading(state, status) {
-			state.loading = status;
+		clearState(state) {
+			state.group = null;
+			state.code = null;
+			state.loading = true;
 		},
 	},
 	actions: {
@@ -52,13 +53,18 @@ export default {
 				commit('setLoading', false);
 			});
 		},
-		leaveGroup({ dispatch, getters, rootGetters, state }) {
+		leaveGroup({ dispatch, commit, rootGetters, state }) {
 			const user = rootGetters['auth/user'];
-			dispatch(
+			return dispatch(
 				'group/removeFromGroup',
 				{ groupCode: state.code, userSlug: user.slug },
 				{ root: true },
-			);
+			).then(({ data }) => {
+				if (data.success) {
+					commit('group/removeGroup', state.code, { root: true });
+				}
+				return data;
+			});
 		},
 	},
 	getters: {
