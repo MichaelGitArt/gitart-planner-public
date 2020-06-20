@@ -13,4 +13,7 @@ export default {
 	join(code) {
 		return apiClient.post('group/join', { code });
 	},
+	removeMember(removeData) {
+		return apiClient.post('group/removeMember', removeData);
+	},
 };

@@ -13,14 +13,8 @@
 				<v-list-item v-if="isAdmin" link :to="{ name: 'GroupSingleSettings' }">
 					Керувати
 				</v-list-item>
-				<v-list-item
-					:disabled="loading"
-					class="red"
-					dark
-					link
-					@click="leaveGroup"
-				>
-					Покинути групу
+				<v-list-item link @click="leaveGroup">
+					Вийти з групи
 				</v-list-item>
 			</v-list>
 		</v-menu>
@@ -35,15 +29,9 @@ export default {
 			default: false,
 		},
 	},
-	data: () => ({
-		loading: false,
-	}),
 	methods: {
 		leaveGroup() {
-			this.loading = true;
-			this.$store.dispatch('group/single/leaveGroup').finally(() => {
-				this.loading = false;
-			});
+			this.$emit('leaveGroup');
 		},
 	},
 };

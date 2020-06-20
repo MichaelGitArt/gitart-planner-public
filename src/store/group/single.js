@@ -6,6 +6,8 @@ export default {
 	state: {
 		group: null,
 		code: null,
+		loading: true,
+		actionLoading: false,
 	},
 	mutations: {
 		setGroup(state, group) {
@@ -14,9 +16,17 @@ export default {
 		setCode(state, code) {
 			state.code = code;
 		},
+		setLoading(state, status) {
+			state.loading = status;
+		},
+		setActionLoading(state, status) {
+			state.loading = status;
+		},
 	},
 	actions: {
 		getGroup({ dispatch, state, commit }, code) {
+			commit('setLoading', true);
+			commit('setCode', code);
 			return new Promise((resolve) => {
 				if (state.group && state.group.code === code) {
 					return resolve(state.group);
@@ -38,16 +48,25 @@ export default {
 							});
 					}
 				});
+			}).finally(() => {
+				commit('setLoading', false);
 			});
 		},
-		leaveGroup() {},
+		leaveGroup({ dispatch, getters, rootGetters, state }) {
+			const user = rootGetters['auth/user'];
+			dispatch(
+				'group/removeFromGroup',
+				{ groupCode: state.code, userSlug: user.slug },
+				{ root: true },
+			);
+		},
 	},
 	getters: {
 		members(state) {
 			return state.group.members;
 		},
 		group(state) {
-			return state.group;
+			return state.loading ? null : state.group;
 		},
 	},
 };

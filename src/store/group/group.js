@@ -41,6 +41,10 @@ export default {
 				});
 			});
 		},
+		removeFromGroup(_, { groupCode, userSlug }) {
+			console.log('Removing');
+			return groupService.removeMember({ groupCode, userSlug });
+		},
 		createGroup({ commit }, name) {
 			return groupService.create(name).then(({ data }) => {
 				if (data.success) {
