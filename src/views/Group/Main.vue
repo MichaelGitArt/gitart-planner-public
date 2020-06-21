@@ -9,33 +9,28 @@
 		</v-layout>
 		<v-row>
 			<v-col cols="12" sm="6" v-for="group in getGroups" :key="group.code">
-				<v-card>
-					<div class="d-flex align-center py-3 px-4">
-						<router-link
-							tag="h4"
-							class="title"
-							:to="{ name: 'GroupSingle', params: { code: group.code } }"
+				<router-link
+					tag="div"
+					:to="{ name: 'GroupSingle', params: { code: group.code } }"
+				>
+					<v-card class="group-card">
+						<div class=" d-flex align-center py-3 px-4">
+							<div class="title text-h6">
+								{{ group.name }}
+							</div>
+							<v-spacer></v-spacer>
+						</div>
+						<v-footer
+							class="mt-3  lighten-1 text-right justify-space-between "
+							:class="{
+								'green white--text': group.isAdmin,
+							}"
 						>
-							{{ group.name }}
-						</router-link>
-						<v-spacer></v-spacer>
-						<v-btn
-							icon
-							:to="{ name: 'GroupSingle', params: { code: group.code } }"
-						>
-							<v-icon>mdi-arrow-right</v-icon>
-						</v-btn>
-					</div>
-					<v-footer
-						class="mt-3  lighten-1 text-right justify-space-between "
-						:class="{
-							'green white--text': group.isAdmin,
-						}"
-					>
-						<span>{{ group.isAdmin ? 'Староста' : 'Учасник' }}</span>
-						<span>Учасників: {{ group.countMembers }}</span>
-					</v-footer>
-				</v-card>
+							<span>{{ group.isAdmin ? 'Староста' : 'Учасник' }}</span>
+							<span>Учасників: {{ group.countMembers }}</span>
+						</v-footer>
+					</v-card>
+				</router-link>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -49,3 +44,14 @@ export default {
 	},
 };
 </script>
+
+<style scoped lang="scss">
+.group-card {
+	cursor: pointer;
+	transition: all 0.3s;
+
+	&:hover {
+		transform: translate(0, -4px);
+	}
+}
+</style>
