@@ -18,10 +18,13 @@ module.exports.catchErrors = (fn) => {
  */
 module.exports.handleErrors = (err, res) => {
 	const { statusCode, message } = err;
-
-	res.status(statusCode || 500).json({
+	const returnObj = {
 		success: false,
 		statusCode: statusCode || 500,
 		message: message || errorMessages.errors.unexpectedError,
-	});
+	};
+	if (err['validation']) {
+		returnObj.validation = err['validation'];
+	}
+	res.status(statusCode || 500).json(returnObj);
 };

@@ -24,6 +24,16 @@ module.exports.AccessDenied = (message = resMessages.errors.accessDenied) => {
 	return httpErrors(403, message, { id: 'access_denied' });
 };
 
+module.exports.ValidationError = (
+	message = resMessages.errors.validationError,
+	validationObj,
+) => {
+	return httpErrors(400, message, {
+		id: 'validation_error',
+		validation: validationObj,
+	});
+};
+
 module.exports.UnexpectedError = (
 	message = resMessages.errors.unexpectedError,
 ) => {

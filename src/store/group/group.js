@@ -28,6 +28,13 @@ export default {
 		removeGroup(state, code) {
 			state.groups = state.groups.filter((group) => group.code !== code);
 		},
+		updateGroup(state, { code, updateFields }) {
+			const groupIndex = state.groups.findIndex((group) => group.code === code);
+			state.groups[groupIndex] = {
+				...state.groups[groupIndex],
+				...updateFields,
+			};
+		},
 	},
 	actions: {
 		fetchGroups({ commit }) {

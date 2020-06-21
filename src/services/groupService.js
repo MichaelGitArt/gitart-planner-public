@@ -16,4 +16,7 @@ export default {
 	removeMember(removeData) {
 		return apiClient.post('group/removeMember', removeData);
 	},
+	updateGroup(payload) {
+		return apiClient.post('group/updateGroup', payload);
+	},
 };

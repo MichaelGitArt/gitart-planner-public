@@ -11,11 +11,7 @@
 				<template v-else>
 					<div class="text-lg-h5 text-h6 mb-1" v-text="group.name" />
 					<p class="ma-0 caption header-code" v-text="code" />
-					<single-group-fast-action
-						@leaveGroup="confirmLeaveGroup"
-						v-if="!loading"
-						:is-admin="isAdmin"
-					/>
+					<single-group-fast-action v-if="!loading" :is-admin="isAdmin" />
 				</template>
 			</template>
 
@@ -47,7 +43,7 @@
 			</template>
 		</base-content-card>
 
-		<v-dialog :persistent="modalLoading" v-model="modal" max-width="340">
+		<v-dialog :persistent="modalLoading" v-model="modalState" max-width="340">
 			<v-card>
 				<v-card-title class="headline">Вийти з групи?</v-card-title>
 
@@ -60,7 +56,7 @@
 						color="grey "
 						:disabled="modalLoading"
 						text
-						@click="modal = false"
+						@click="setModal(false)"
 					>
 						Залишитися
 					</v-btn>
@@ -77,7 +73,7 @@
 			</v-card>
 		</v-dialog>
 
-		<v-dialog v-model="infoModal" max-width="270px">
+		<v-dialog v-model="infoModalState" max-width="270px">
 			<v-card>
 				<v-card-title class="headline">Щось пішло не так</v-card-title>
 
@@ -89,8 +85,8 @@
 						color="green"
 						text
 						@click="
-							infoModal = false;
-							modal = false;
+							setInfoModal(false);
+							setModal(false);
 						"
 					>
 						Закрити
@@ -102,7 +98,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
 import SingleGroupFastAction from '@/components/Pages/Group/SingleGroupFastAction';
 
 export default {
@@ -116,10 +112,6 @@ export default {
 		},
 	},
 	data: () => ({
-		modal: false,
-		modalLoading: false,
-		infoModal: false,
-		infoModalMessage: '',
 		tabs: [
 			{
 				to: { name: 'GroupSingleFlow' },
@@ -143,31 +135,36 @@ export default {
 		this.$store.dispatch('group/single/getGroup', this.code);
 	},
 	methods: {
-		confirmLeaveGroup() {
-			this.modal = true;
-		},
-		leaveGroup() {
-			this.modalLoading = true;
-			this.$store
-				.dispatch('group/single/leaveGroup')
-				.then((result) => {
-					if (result.success) {
-						this.modal = false;
-						this.$router.push({ name: 'GroupMain' });
-						this.$store.commit('group/single/clearState');
-					} else {
-						this.infoModalMessage = result.message;
-						this.infoModal = true;
-					}
-				})
-				.finally(() => {
-					this.modalLoading = false;
-				});
-		},
+		...mapActions('group/single', ['leaveGroup']),
+		...mapMutations('group/single', ['setModal', 'setInfoModal']),
 	},
 	computed: {
+		modalState: {
+			set(value) {
+				this.setModal(value);
+			},
+			get() {
+				return this.modal;
+			},
+		},
+		infoModalState: {
+			set(value) {
+				this.setInfoModal(value);
+			},
+			get() {
+				return this.infoModal;
+			},
+		},
+		...mapState('group/single', [
+			'loading',
+			'modal',
+			'modalLoading',
+			'infoModal',
+			'infoModalMessage',
+		]),
+
 		...mapGetters('group/single', ['group']),
-		...mapState('group/single', ['loading']),
+
 		isSettingsPage() {
 			return this.$route.name === 'GroupSingleSettings';
 		},

@@ -1,5 +1,6 @@
 import router from '@/router';
 import store from '@/store';
+import groupService from '@/services/groupService';
 
 export default {
 	namespaced: true,
@@ -7,6 +8,10 @@ export default {
 		group: null,
 		code: null,
 		loading: true,
+		modal: false,
+		modalLoading: false,
+		infoModal: false,
+		infoModalMessage: '',
 	},
 	mutations: {
 		setGroup(state, group) {
@@ -18,10 +23,28 @@ export default {
 		setLoading(state, status) {
 			state.loading = status;
 		},
+		setModal(state, status) {
+			state.modal = status;
+		},
+		setModalLoading(state, status) {
+			state.modalLoading = status;
+		},
+		setInfoModal(state, status) {
+			state.infoModal = status;
+		},
+		setInfoModalMessage(state, message) {
+			state.infoModalMessage = message;
+		},
 		clearState(state) {
 			state.group = null;
 			state.code = null;
 			state.loading = true;
+		},
+		updateGroup(state, groupFields) {
+			state.group = {
+				...state.group,
+				...groupFields,
+			};
 		},
 	},
 	actions: {
@@ -53,17 +76,51 @@ export default {
 				commit('setLoading', false);
 			});
 		},
+		confirmLeaveGroup({ commit }) {
+			commit('setModal', true);
+		},
+		confirmRemoveGroup({ commit }) {
+			commit('setInfoModal', true);
+			commit('setInfoModalMessage', 'Можливість видалення не реалізована');
+		},
 		leaveGroup({ dispatch, commit, rootGetters, state }) {
 			const user = rootGetters['auth/user'];
 			return dispatch(
 				'group/removeFromGroup',
 				{ groupCode: state.code, userSlug: user.slug },
 				{ root: true },
-			).then(({ data }) => {
+			)
+				.then(({ data }) => {
+					if (data.success) {
+						commit('group/removeGroup', state.code, { root: true });
+					}
+
+					commit('setModalLoading', true);
+
+					if (data.success) {
+						commit('setModal', false);
+						commit('clearState');
+						router.push({ name: 'GroupMain' });
+					} else {
+						commit('setInfoModal', true);
+						commit('setInfoModalMessage', data.message);
+					}
+				})
+				.finally(() => {
+					commit('setModalLoading', false);
+				});
+		},
+		updateGroup({ commit, state }, payload) {
+			groupService.updateGroup(payload).then(({ data }) => {
 				if (data.success) {
-					commit('group/removeGroup', state.code, { root: true });
+					console.log(data.group);
+					commit('updateGroup', data.group);
+					commit(
+						'group/updateGroup',
+						{ code: state.code, updateFields: data.group },
+						{ root: true },
+					);
 				}
-				return data;
 			});
 		},
 	},

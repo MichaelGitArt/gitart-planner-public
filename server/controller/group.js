@@ -1,3 +1,8 @@
+const { minifySpaces } = require('../libs/utils');
+
+const { validationResult } = require('express-validator');
+const resMessages = require('../libs/response-messages');
+
 const Group = require('../model/group');
 const Member = require('../model/member');
 const User = require('../model/user');
@@ -6,6 +11,7 @@ const {
 	AccessDenied,
 	InvalidRequestError,
 	UnexpectedError,
+	ValidationError,
 } = require('../libs/errors');
 
 module.exports.createGroup = async (req, res) => {
@@ -197,5 +203,28 @@ module.exports.removeMember = async (req, res) => {
 
 	return res.json({
 		success: true,
+	});
+};
+module.exports.updateGroup = async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		throw ValidationError(resMessages.errors.validationError, errors.array());
+	}
+
+	const { groupCode, updateFields } = req.body;
+	const group = await Group.findOne().byCode(groupCode);
+
+	const isMember = await group.hasMember(req.user._id);
+
+	if (!isMember.isAdmin) throw AccessDenied();
+
+	group.name = minifySpaces(updateFields.name);
+	await group.save();
+
+	return res.json({
+		success: true,
+		group: {
+			name: group.name,
+		},
 	});
 };

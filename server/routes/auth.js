@@ -27,6 +27,13 @@ router.post(
 	catchErrors(authController.getProfile),
 );
 router.post(
+	'/checkFreeSlug',
+	auth({ required: true }),
+	checkSlug,
+	catchErrors(authController.checkFreeSlug),
+);
+
+router.post(
 	'/profile/:slug/update',
 	auth({ required: true }),
 	checkSlug,
@@ -35,20 +42,13 @@ router.post(
 			.isString()
 			.trim(),
 		check('name')
+			.trim()
 			.isLength({ min: 3, max: 30 })
 			.withMessage('Від 3 до 30 символів')
 			.matches(/^[a-z0-9а-я ]+$/i)
-			.withMessage('Лише букви, цифри та пробіли')
-			.trim(),
+			.withMessage('Лише букви, цифри та пробіли'),
 	],
 	catchErrors(authController.updateProfile),
-);
-
-router.post(
-	'/checkFreeSlug',
-	auth({ required: true }),
-	checkSlug,
-	catchErrors(authController.checkFreeSlug),
 );
 
 module.exports = router;

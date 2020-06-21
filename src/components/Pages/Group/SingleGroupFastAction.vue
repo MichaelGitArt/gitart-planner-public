@@ -31,7 +31,7 @@ export default {
 	},
 	methods: {
 		leaveGroup() {
-			this.$emit('leaveGroup');
+			this.$store.dispatch('group/single/confirmLeaveGroup');
 		},
 	},
 };

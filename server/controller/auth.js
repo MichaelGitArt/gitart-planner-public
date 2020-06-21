@@ -2,6 +2,7 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
+const { minifySpaces } = require('../libs/utils');
 const errorMessages = require('../libs/response-messages');
 const { cookieUpdate } = require('../libs/cookie');
 const User = require('../model/user');
@@ -116,7 +117,7 @@ module.exports.updateProfile = async (req, res) => {
 	const name = req.body.name;
 
 	req.user.slug = slug;
-	req.user.name = name;
+	req.user.name = minifySpaces(name);
 
 	req.user.save().then((savedUser) => {
 		const profile = savedUser.getProfileInfo();
