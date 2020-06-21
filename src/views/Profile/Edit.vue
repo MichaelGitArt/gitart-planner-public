@@ -31,7 +31,7 @@
 						>
 							<v-text-field
 								:error-messages="mergeErrors('slug', errors)"
-								v-model="slug"
+								v-model.trim="slug"
 								:counter="20"
 								color="green"
 								:loading="slugLoading"
@@ -141,8 +141,6 @@ export default {
 				});
 		},
 		checkSlug() {
-			console.log('check...');
-			// this.slugErrors = [];
 			this.slugHint = null;
 			this.$refs.observer.validate().then((valid) => {
 				if (!valid) return;
