@@ -11,7 +11,7 @@
 				<template v-else>
 					<div class="text-lg-h5 text-h6 mb-1" v-text="group.name" />
 					<p class="ma-0 caption header-code" v-text="code" />
-					<single-group-fast-action v-if="!loading" :is-admin="isAdmin" />
+					<fast-action v-if="!loading" :is-admin="isAdmin" />
 				</template>
 			</template>
 
@@ -39,7 +39,9 @@
 				</v-tabs>
 				<v-divider class="mb-3" />
 
-				<router-view />
+				<transition name="fade-slide" mode="out-in" appear>
+					<router-view />
+				</transition>
 			</template>
 		</base-content-card>
 
@@ -99,11 +101,11 @@
 
 <script>
 import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
-import SingleGroupFastAction from '@/components/Pages/Group/SingleGroupFastAction';
+import FastAction from '@/components/Pages/Group/Single/FastAction';
 
 export default {
 	components: {
-		SingleGroupFastAction,
+		FastAction,
 	},
 	props: {
 		code: {
@@ -185,7 +187,7 @@ export default {
 .group-page {
 	border-top: 3px solid transparent;
 	&--admin {
-		border-color: map-get($orange, 'base');
+		border-color: map-get($green, 'base');
 	}
 }
 </style>

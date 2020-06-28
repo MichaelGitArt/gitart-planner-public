@@ -1,6 +1,8 @@
 <template>
 	<profile-layout :profile="user" personal>
-		<router-view></router-view>
+		<transition name="fade-slide" mode="out-in" appear>
+			<router-view></router-view>
+		</transition>
 	</profile-layout>
 </template>
 

@@ -108,9 +108,15 @@ module.exports.getGroup = async (req, res) => {
 				role: true,
 				name: '$user.name',
 				slug: '$user.slug',
+				isYou: { $eq: [req.user.slug, '$user.slug'] },
+				isAdmin: {
+					$or: [{ $eq: ['admin', '$role'] }, { $eq: ['primary', '$role'] }],
+				},
+				isPrimary: { $eq: ['primary', '$role'] },
 			},
 		},
 	]).exec((err, foundedMembers) => {
+		console.log(foundedMembers);
 		if (err) {
 			throw UnexpectedError();
 		}
@@ -146,7 +152,9 @@ module.exports.getGroups = async (req, res) => {
 		{
 			$project: {
 				_id: false,
-				isAdmin: { $eq: ['admin', '$role'] },
+				isAdmin: {
+					$or: [{ $eq: ['admin', '$role'] }, { $eq: ['primary', '$role'] }],
+				},
 				name: '$group.name',
 				code: '$group.code',
 				countMembers: { $size: '$group.members' },

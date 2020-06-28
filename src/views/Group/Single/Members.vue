@@ -1,37 +1,34 @@
 <template>
 	<div>
 		<v-list>
-			<v-list-item
-				dense
-				v-for="member in members"
-				:key="member.slug"
-				:class="{ highlighted: member.slug === user.slug }"
-				active-class="highlighted"
-			>
-				<v-list-item-content>
-					<v-list-item-title>
-						{{ member.name }} {{ member.slug === user.slug ? '(Ти)' : '' }}
-					</v-list-item-title>
-					<v-list-item-subtitle>
-						{{ member.role === 'admin' ? 'Староста' : 'Учасник' }}
-					</v-list-item-subtitle>
-				</v-list-item-content>
-
-				<v-list-item-action>
-					<v-btn icon :to="{ name: 'Profile', params: { slug: member.slug } }">
-						<v-icon dark>mdi-account-arrow-right</v-icon>
-					</v-btn>
-				</v-list-item-action>
-			</v-list-item>
+			<member-group
+				:members="byRole('admin')"
+				title="Старости"
+				class="mb-2"
+			></member-group>
+			<member-group :members="byRole('member')" title="Учасники"></member-group>
 		</v-list>
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import MemberGroup from '@/components/Pages/Group/Single/MemberGroup';
+
 export default {
+	components: {
+		MemberGroup,
+	},
+	methods: {
+		log() {
+			console.log('good');
+		},
+	},
 	computed: {
 		...mapGetters('group/single', ['members']),
+		byRole() {
+			return (role) => this.members.filter((member) => member.role === role);
+		},
 	},
 };
 </script>

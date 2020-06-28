@@ -10,7 +10,7 @@ const memberSchema = new Schema(
 		role: {
 			type: String,
 			required: true,
-			enum: ['admin', 'member'],
+			enum: ['admin', 'member', 'primary'],
 		},
 		group: {
 			type: Schema.Types.ObjectId,
@@ -47,7 +47,7 @@ memberSchema.methods.removeMembership = async function(group, user) {
 };
 
 memberSchema.virtual('isAdmin').get(function() {
-	return this.role === 'admin';
+	return this.role === 'admin' || this.role === 'primary';
 });
 
 module.exports = mongoose.model('Member', memberSchema);
