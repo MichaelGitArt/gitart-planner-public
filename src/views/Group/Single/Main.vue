@@ -44,68 +44,19 @@
 				</transition>
 			</template>
 		</base-content-card>
-
-		<v-dialog :persistent="modalLoading" v-model="modalState" max-width="340">
-			<v-card>
-				<v-card-title class="headline">Вийти з групи?</v-card-title>
-
-				<v-card-text>
-					Ти зможеш пізніше знову приєднатися.
-				</v-card-text>
-
-				<v-card-actions class="flex-wrap justify-end">
-					<v-btn
-						color="grey "
-						:disabled="modalLoading"
-						text
-						@click="setModal(false)"
-					>
-						Залишитися
-					</v-btn>
-
-					<v-btn
-						color="green darken-1"
-						:disabled="modalLoading"
-						text
-						@click="leaveGroup"
-					>
-						{{ modalLoading ? 'Вихід з групи...' : 'Вийти з групи' }}
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
-
-		<v-dialog v-model="infoModalState" max-width="270px">
-			<v-card>
-				<v-card-title class="headline">Щось пішло не так</v-card-title>
-
-				<v-card-text>
-					{{ infoModalMessage }}
-				</v-card-text>
-				<v-card-actions class="justify-end">
-					<v-btn
-						color="green"
-						text
-						@click="
-							setInfoModal(false);
-							setModal(false);
-						"
-					>
-						Закрити
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+		<group-modals />
 	</v-container>
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 import FastAction from '@/components/Pages/Group/Single/FastAction';
+import GroupModals from '@/components/Pages/Group/Single/Modals/GroupModals';
 
 export default {
 	components: {
 		FastAction,
+		GroupModals,
 	},
 	props: {
 		code: {
@@ -136,35 +87,9 @@ export default {
 	mounted() {
 		this.$store.dispatch('group/single/getGroup', this.code);
 	},
-	methods: {
-		...mapActions('group/single', ['leaveGroup']),
-		...mapMutations('group/single', ['setModal', 'setInfoModal']),
-	},
-	computed: {
-		modalState: {
-			set(value) {
-				this.setModal(value);
-			},
-			get() {
-				return this.modal;
-			},
-		},
-		infoModalState: {
-			set(value) {
-				this.setInfoModal(value);
-			},
-			get() {
-				return this.infoModal;
-			},
-		},
-		...mapState('group/single', [
-			'loading',
-			'modal',
-			'modalLoading',
-			'infoModal',
-			'infoModalMessage',
-		]),
 
+	computed: {
+		...mapState('group/single', ['loading']),
 		...mapGetters('group/single', ['group']),
 
 		isSettingsPage() {

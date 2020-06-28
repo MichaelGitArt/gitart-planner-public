@@ -8,10 +8,17 @@ export default {
 		group: null,
 		code: null,
 		loading: true,
-		modal: false,
-		modalLoading: false,
-		infoModal: false,
-		infoModalMessage: '',
+
+		mainModal: {
+			type: null,
+			status: false,
+			loading: false,
+		},
+		infoModal: {
+			status: false,
+			message: '',
+			title: '',
+		},
 	},
 	mutations: {
 		setGroup(state, group) {
@@ -23,17 +30,21 @@ export default {
 		setLoading(state, status) {
 			state.loading = status;
 		},
+		setModalType(state, type) {
+			state.mainModal.type = type;
+		},
 		setModal(state, status) {
-			state.modal = status;
+			state.mainModal.status = status;
 		},
 		setModalLoading(state, status) {
-			state.modalLoading = status;
+			state.mainModal.loading = status;
 		},
 		setInfoModal(state, status) {
-			state.infoModal = status;
+			state.infoModal.status = status;
 		},
-		setInfoModalMessage(state, message) {
-			state.infoModalMessage = message;
+		setInfoModalContent(state, { message, title = 'Щось пішло не так' }) {
+			state.infoModal.message = message;
+			state.infoModal.title = title;
 		},
 		clearState(state) {
 			state.group = null;
@@ -77,11 +88,12 @@ export default {
 			});
 		},
 		confirmLeaveGroup({ commit }) {
+			commit('setModalType', 'group-leave');
 			commit('setModal', true);
 		},
 		confirmRemoveGroup({ commit }) {
-			commit('setInfoModal', true);
-			commit('setInfoModalMessage', 'Можливість видалення не реалізована');
+			commit('setModalType', 'group-destroy');
+			commit('setModal', true);
 		},
 		leaveGroup({ dispatch, commit, rootGetters, state }) {
 			const user = rootGetters['auth/user'];
@@ -103,12 +115,16 @@ export default {
 						router.push({ name: 'GroupMain' });
 					} else {
 						commit('setInfoModal', true);
-						commit('setInfoModalMessage', data.message);
+						commit('setInfoModalContent', { message: data.message });
 					}
 				})
 				.finally(() => {
 					commit('setModalLoading', false);
 				});
+		},
+		destroyGroup({ dispatch, commit }) {
+			commit('setInfoModal', true);
+			commit('setInfoModalContent', { message: 'Функція у розробці' });
 		},
 		updateGroup({ commit, state }, payload) {
 			groupService.updateGroup(payload).then(({ data }) => {
