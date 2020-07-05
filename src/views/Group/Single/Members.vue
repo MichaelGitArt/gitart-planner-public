@@ -2,7 +2,7 @@
 	<div>
 		<v-list>
 			<member-group
-				:members="byRole('admin')"
+				:members="byRole(['admin', 'primary'])"
 				title="Старости"
 				class="mb-2"
 			></member-group>
@@ -27,7 +27,12 @@ export default {
 	computed: {
 		...mapGetters('group/single', ['members']),
 		byRole() {
-			return (role) => this.members.filter((member) => member.role === role);
+			return (role) =>
+				this.members.filter((member) => {
+					return Array.isArray(role)
+						? role.includes(member.role)
+						: member.role === role;
+				});
 		},
 	},
 };

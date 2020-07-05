@@ -28,39 +28,42 @@
 </template>
 
 <script>
-import GroupModalLeave from '@/components/Pages/Group/Single/Modals/GroupModalLeave';
 import { mapMutations, mapState } from 'vuex';
+import GroupModalLeave from '@/components/Pages/Group/Single/Modals/GroupModalLeave';
 import GroupModalDestroy from '@/components/Pages/Group/Single/Modals/GroupModalDestroy';
+import GroupModalSetStatus from '@/components/Pages/Group/Single/Modals/GroupModalSetStatus';
 
 export default {
 	components: {
 		GroupModalLeave,
 		GroupModalDestroy,
+		GroupModalSetStatus,
 	},
 	data: () => ({
 		modalTypes: {
 			'group-leave': 'GroupModalLeave',
 			'group-destroy': 'GroupModalDestroy',
+			'group-set-status': 'GroupModalSetStatus',
 		},
 	}),
 	methods: {
 		...mapMutations('group/single', ['setModal', 'setInfoModal']),
 		closeModal() {
-			this.setModal(false);
+			this.setModal({ status: false });
 		},
 	},
 	computed: {
 		modalState: {
-			set(value) {
-				this.setModal(value);
+			set(status) {
+				this.setModal({ status });
 			},
 			get() {
 				return this.mainModal.status;
 			},
 		},
 		infoModalState: {
-			set(value) {
-				this.setInfoModal(value);
+			set(status) {
+				this.setInfoModal({ status });
 			},
 			get() {
 				return this.infoModal.status;

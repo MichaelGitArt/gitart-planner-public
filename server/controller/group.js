@@ -20,7 +20,7 @@ module.exports.createGroup = async (req, res) => {
 	const group = new Group({
 		name: groupName,
 	});
-	await group.addMember(req.user, 'admin');
+	await group.addMember(req.user, 'primary');
 
 	return res.json({
 		success: true,
@@ -128,6 +128,7 @@ module.exports.getGroup = async (req, res) => {
 				code: group.code,
 				members: foundedMembers,
 				isAdmin: isMember.isAdmin,
+				isPrimary: isMember.isPrimary,
 			},
 		});
 	});

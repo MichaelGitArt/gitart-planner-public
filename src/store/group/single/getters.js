@@ -6,9 +6,9 @@ export default {
 		return state.loading ? null : state.group;
 	},
 	isAdmin(state) {
-		return state.isAdmin;
+		return state.group.isAdmin;
 	},
 	isPrimary(state) {
-		return state.isPrimary;
+		return state.group.isPrimary;
 	},
 };

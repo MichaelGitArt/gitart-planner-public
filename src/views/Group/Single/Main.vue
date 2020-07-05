@@ -39,7 +39,7 @@
 				</v-tabs>
 				<v-divider class="mb-3" />
 
-				<transition name="fade-slide" mode="out-in" appear>
+				<transition name="fade-slide" mode="out-in">
 					<router-view />
 				</transition>
 			</template>

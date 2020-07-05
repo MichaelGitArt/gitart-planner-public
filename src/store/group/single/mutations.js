@@ -11,8 +11,9 @@ export default {
 	setModalType(state, type) {
 		state.mainModal.type = type;
 	},
-	setModal(state, status) {
+	setModal(state, { status, data = {} }) {
 		state.mainModal.status = status;
+		state.mainModal.data = data;
 	},
 	setModalLoading(state, status) {
 		state.mainModal.loading = status;

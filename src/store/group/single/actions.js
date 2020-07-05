@@ -33,11 +33,15 @@ export default {
 	},
 	confirmLeaveGroup({ commit }) {
 		commit('setModalType', 'group-leave');
-		commit('setModal', true);
+		commit('setModal', { status: true });
 	},
 	confirmRemoveGroup({ commit }) {
 		commit('setModalType', 'group-destroy');
-		commit('setModal', true);
+		commit('setModal', { status: true });
+	},
+	confirmSetStatus({ commit }) {
+		commit('setModalType', 'group-set-status');
+		commit('setModal', { status: true });
 	},
 	leaveGroup({ dispatch, commit, rootGetters, state }) {
 		const user = rootGetters['auth/user'];
@@ -54,7 +58,7 @@ export default {
 				commit('setModalLoading', true);
 
 				if (data.success) {
-					commit('setModal', false);
+					commit('setModal', { status: false });
 					commit('clearState');
 					router.push({ name: 'GroupMain' });
 				} else {
@@ -66,7 +70,7 @@ export default {
 				commit('setModalLoading', false);
 			});
 	},
-	destroyGroup({ dispatch, commit }) {
+	destroyGroup({ commit }) {
 		commit('setInfoModal', true);
 		commit('setInfoModalContent', { message: 'Функція у розробці' });
 	},

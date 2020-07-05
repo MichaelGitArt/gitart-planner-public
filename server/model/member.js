@@ -16,6 +16,7 @@ const memberSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'Group',
 		},
+		specialName: String,
 	},
 	{ timestamp: true },
 );
@@ -48,6 +49,9 @@ memberSchema.methods.removeMembership = async function(group, user) {
 
 memberSchema.virtual('isAdmin').get(function() {
 	return this.role === 'admin' || this.role === 'primary';
+});
+memberSchema.virtual('isPrimary').get(function() {
+	return this.role === 'primary';
 });
 
 module.exports = mongoose.model('Member', memberSchema);
