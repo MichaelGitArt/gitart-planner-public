@@ -39,10 +39,7 @@
 					<template v-slot:activator="{ on }">
 						<div v-on="on">
 							<v-list-item-avatar class="mr-0">
-								<img
-									src="@/assets/images/general/profile-placeholder.png"
-									:alt="user.name"
-								/>
+								<img :src="user.avatar" :alt="user.name" />
 							</v-list-item-avatar>
 						</div>
 					</template>
@@ -50,10 +47,7 @@
 						<v-list>
 							<v-list-item>
 								<v-list-item-avatar>
-									<img
-										src="@/assets/images/general/profile-placeholder.png"
-										:alt="user.name"
-									/>
+									<img :src="user.avatar" :alt="user.name" />
 								</v-list-item-avatar>
 								<v-list-item-content>
 									<v-list-item-title>{{ user.name }}</v-list-item-title>

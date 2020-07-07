@@ -7,4 +7,8 @@ export default {
 		}
 		state.checked = true;
 	},
+	updateUser(state, updateFields) {
+		state.user = { ...state.user, ...updateFields };
+		console.log(state.user);
+	},
 };

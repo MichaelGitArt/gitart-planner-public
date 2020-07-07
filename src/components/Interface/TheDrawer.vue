@@ -14,10 +14,7 @@
 			class="white--text"
 		>
 			<v-list-item-avatar class="my-2">
-				<img
-					src="@/assets/images/general/profile-placeholder.png"
-					:alt="user.name"
-				/>
+				<img :src="user.avatar" :alt="user.name" />
 			</v-list-item-avatar>
 			<v-list-item-content>
 				<v-list-item-title>Gitart Planner</v-list-item-title>

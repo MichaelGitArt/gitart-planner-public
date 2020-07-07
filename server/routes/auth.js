@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const { check } = require('express-validator');
 
+const { multerUpload } = require('../libs/handlers/images');
 const authController = require('../controller/auth');
 const { catchErrors } = require('../libs/handlers/errors');
 const auth = require('../middleware/authentication');
 const checkSlug = require('../middleware/checkSlug');
+
+const upload = multerUpload(['user']);
 
 router.post(
 	'/check',
@@ -49,6 +52,14 @@ router.post(
 			.withMessage('Лише букви, цифри та пробіли'),
 	],
 	catchErrors(authController.updateProfile),
+);
+
+router.post(
+	'/upload-avatar',
+	auth({ required: true }),
+	// upload.single('img'),
+	upload.single('img'),
+	catchErrors(authController.uploadAvatar),
 );
 
 module.exports = router;

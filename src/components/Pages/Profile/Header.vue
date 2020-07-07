@@ -4,10 +4,7 @@
 			class="profile-header__avatar align-self-start elevation-2 mt-lg-n10 mt-n8 mb-0 mb-lg-4"
 			:size="$vuetify.breakpoint.lgAndUp ? 100 : 70"
 		>
-			<img
-				src="@/assets/images/general/profile-placeholder.png"
-				:alt="profile.name"
-			/>
+			<img :src="profile.avatar" :alt="profile.name" />
 		</v-list-item-avatar>
 		<v-list-item-content class="align-self-start align-self-lg-center">
 			<h4 class="title" v-text="profile.name" />

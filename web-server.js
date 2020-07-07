@@ -5,14 +5,14 @@ const express = require('express');
 const { join } = require('path');
 const history = require('connect-history-api-fallback');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const dotEnv = require('dotenv');
 
 const { handleErrors } = require('./server/libs/handlers/errors');
 
 const routes = require('./server/routes');
 
 if (process.env.NODE_ENV === 'development') {
-	dotenv.config({ path: './.env.local' });
+	dotEnv.config({ path: './.env.local' });
 }
 
 const app = express();
@@ -33,10 +33,16 @@ app.use(
 	history({
 		rewrites: [
 			{
+				from: /^\/uploads.*$/,
+				to: function(context) {
+					console.log(context.parsedUrl);
+					return context.parsedUrl.pathname;
+				},
+			},
+			{
 				from: /^\/api\/.*$/,
 				to: function(context) {
 					return context.parsedUrl.pathname;
-					// return '/dist' + context.parsedUrl.pathname;
 				},
 			},
 		],
@@ -45,6 +51,7 @@ app.use(
 
 // Allow vue dist folder
 app.use(express.static(join(__dirname, 'dist')));
+app.use('/uploads', express.static(join(__dirname, 'server', 'uploads')));
 
 app.use('/api', routes);
 

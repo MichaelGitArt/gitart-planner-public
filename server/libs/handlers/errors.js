@@ -17,11 +17,16 @@ module.exports.catchErrors = (fn) => {
  * Central error handling
  */
 module.exports.handleErrors = (err, res) => {
+	console.log(err);
 	const { statusCode, message } = err;
+	console.log(statusCode);
+	console.log(message);
 	const returnObj = {
 		success: false,
 		statusCode: statusCode || 500,
-		message: message || errorMessages.errors.unexpectedError,
+		message: !statusCode
+			? errorMessages.errors.unexpectedError
+			: message || errorMessages.errors.unexpectedError,
 	};
 	if (err['validation']) {
 		returnObj.validation = err['validation'];

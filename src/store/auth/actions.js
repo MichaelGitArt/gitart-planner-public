@@ -22,9 +22,15 @@ export default {
 			}
 		});
 	},
-	getProfile(ctx, slug) {
+	getProfile(_, slug) {
 		return authService.getProfile(slug).then(({ data }) => {
 			return data.user;
+		});
+	},
+	uploadAvatar({ commit }, formData) {
+		return authService.uploadAvatar(formData).then(({ data }) => {
+			commit('updateUser', data.user);
+			return data;
 		});
 	},
 };

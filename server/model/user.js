@@ -32,6 +32,9 @@ const userSchema = new Schema(
 				ref: 'Member',
 			},
 		],
+		avatar: {
+			type: String,
+		},
 	},
 	{ timestamp: true },
 );
@@ -40,10 +43,17 @@ userSchema.query.bySlug = function(slug) {
 	return this.findOne({ slug });
 };
 
+userSchema.virtual('avatarPath').get(function() {
+	return this.avatar
+		? '/uploads/user/' + this.avatar
+		: '/uploads/placeholder/avatar.png';
+});
+
 userSchema.methods.getProfileInfo = function() {
 	return {
 		name: this.name,
 		slug: this.slug,
+		avatar: this.avatarPath,
 	};
 };
 

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import VueClipper from 'vuejs-clipper';
 
 import App from './App.vue';
 import router from './router';
@@ -19,6 +20,12 @@ Vue.config.productionTip = false;
 
 Vue.use(userExpration);
 Vue.use(VueToast);
+Vue.use(VueClipper, {
+	components: {
+		clipperBasic: true,
+		clipperPreview: true,
+	},
+});
 
 new Vue({
 	router,

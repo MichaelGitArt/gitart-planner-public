@@ -8,6 +8,10 @@ module.exports = {
 				target: 'http://localhost:3001',
 				ws: true,
 			},
+			'^/uploads': {
+				target: 'http://localhost:3001',
+				ws: true,
+			},
 		},
 	},
 	lintOnSave: false,

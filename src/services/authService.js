@@ -8,16 +8,23 @@ export default {
 		return apiClient.post('auth/logout');
 	},
 	getProfile(slug) {
-		return apiClient.post('auth/profile/' + slug)
+		return apiClient.post('auth/profile/' + slug);
 	},
 	updateProfile(slug, updateObj) {
 		return apiClient.post('auth/profile/' + slug + '/update', updateObj);
 	},
+	uploadAvatar(formData) {
+		return apiClient.post('auth/upload-avatar', formData);
+	},
 	checkFreeSlug(slug, source) {
-		return apiClient.post('auth/checkFreeSlug', {
-			slug
-		}, {
-			cancelToken: source.token
-		});
-	}
-}
+		return apiClient.post(
+			'auth/checkFreeSlug',
+			{
+				slug,
+			},
+			{
+				cancelToken: source.token,
+			},
+		);
+	},
+};

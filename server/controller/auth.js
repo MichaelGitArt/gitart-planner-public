@@ -1,12 +1,15 @@
+const canvas = require('canvas');
+const clipper = require('image-clipper');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
-const { minifySpaces } = require('../libs/utils');
+const { minifySpaces, pathToUploadFile } = require('../libs/utils');
 const errorMessages = require('../libs/response-messages');
 const { cookieUpdate } = require('../libs/cookie');
 const User = require('../model/user');
 
+clipper.configure('canvas', canvas);
 const client = new OAuth2Client(
 	process.env.GOOGLE_CLIENT_ID,
 	process.env.GOOGLE_CLIENT_SECRET,
@@ -132,6 +135,25 @@ module.exports.checkFreeSlug = async (req, res) => {
 	res.json({
 		status: req.slugValidation.status,
 		message: req.slugValidation.message,
+	});
+};
+
+module.exports.uploadAvatar = async (req, res) => {
+	const imagePath = pathToUploadFile(['user', req.file.filename]);
+	// path.join(appDir, 'server', 'uploads', 'user', req.file.filename);
+
+	clipper(imagePath, function() {
+		this.resize(120, 120).toFile(imagePath, async function() {
+			req.user.avatar = req.file.filename;
+			await req.user.save();
+
+			res.json({
+				success: true,
+				user: {
+					avatar: req.user.avatarPath,
+				},
+			});
+		});
 	});
 };
 
