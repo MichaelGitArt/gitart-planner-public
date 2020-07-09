@@ -4,7 +4,7 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
 
-const { minifySpaces, pathToUploadFile } = require('../libs/utils');
+const { minifySpaces } = require('../libs/utils');
 const errorMessages = require('../libs/response-messages');
 const { cookieUpdate } = require('../libs/cookie');
 const User = require('../model/user');
@@ -139,7 +139,8 @@ module.exports.checkFreeSlug = async (req, res) => {
 };
 
 module.exports.uploadAvatar = async (req, res) => {
-	const imagePath = pathToUploadFile(['user', req.file.filename]);
+	const imagePath = req.file.filename;
+	// const imagePath = pathToUploadFile(['user', req.file.filename]);
 	// path.join(appDir, 'server', 'uploads', 'user', req.file.filename);
 
 	clipper(imagePath, function() {
